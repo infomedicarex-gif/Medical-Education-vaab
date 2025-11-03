@@ -1,0 +1,3552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreMium Nexus Testing Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1a56db;
+            --secondary-blue: #0ea5e9;
+            --dark-blue: #1e3a8a;
+            --light-blue: #dbeafe;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-teal: #14b8a6;
+            --gradient-blue: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            --gradient-green: linear-gradient(135deg, var(--accent-green), #34d399);
+            --gradient-orange: linear-gradient(135deg, var(--accent-orange), #f97316);
+            --gradient-red: linear-gradient(135deg, var(--accent-red), #f87171);
+            --gradient-purple: linear-gradient(135deg, var(--accent-purple), #a78bfa);
+            --gradient-pink: linear-gradient(135deg, var(--accent-pink), #f472b6);
+            --gradient-teal: linear-gradient(135deg, var(--accent-teal), #2dd4bf);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 3px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            color: #1e3a8a;
+            font-size: 11px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-blue);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2px;
+        }
+
+        .logo p {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .page {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            display: none;
+            position: relative;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Reusable UI Elements */
+        .promo-banner {
+            background: linear-gradient(135deg, #1e3a8a, #1a56db);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 0.6rem;
+        }
+
+        .promo-banner h2 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #ffd700;
+        }
+
+        .promo-banner p {
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 0.7rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 6px 9px;
+            border: 1.5px solid var(--light-blue);
+            border-radius: 5px;
+            font-size: 0.7rem;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(26, 86, 219, 0.15);
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .password-container .form-input {
+            padding-right: 30px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-blue);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(26, 86, 219, 0.2);
+        }
+
+        .btn-contact {
+            background: var(--gradient-green);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(37, 211, 102, 0.2);
+        }
+
+        .btn-purple {
+            background: var(--gradient-purple);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-purple:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-red {
+            background: var(--gradient-red);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-red:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-orange {
+            background: var(--gradient-orange);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-orange:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-pink {
+            background: var(--gradient-pink);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-pink:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(236, 72, 153, 0.2);
+        }
+
+        .btn-teal {
+            background: var(--gradient-teal);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-teal:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(20, 184, 166, 0.2);
+        }
+
+        .error-box {
+            background: #fee2e2;
+            color: var(--accent-red);
+            padding: 5px 7px;
+            border-radius: 3px;
+            margin-top: 6px;
+            display: none;
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        /* Main Page */
+        .main-page-buttons {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Quiz Access Section */
+        .quiz-access-section {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Payment Section */
+        .payment-info {
+            background: #f0f9ff;
+            border-radius: 5px;
+            padding: 10px;
+            border: 1px solid var(--light-blue);
+            margin-bottom: 8px;
+        }
+
+        .payment-info h3 {
+            font-size: 0.8rem;
+            color: var(--dark-blue);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .payment-info p {
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .payment-info span {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .acknowledgment-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        /* Quiz Section */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid var(--light-blue);
+        }
+
+        .quiz-title-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 80%;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.7rem;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        .timer-container {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        .timer, .question-timer {
+            background: var(--gradient-blue);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            box-shadow: var(--shadow);
+            white-space: nowrap;
+        }
+
+        .timer.total-timer {
+            background: var(--gradient-orange);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            background: var(--gradient-blue);
+        }
+
+        .question-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+            gap: 3px;
+            margin-bottom: 8px;
+        }
+
+        .question-nav-item {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 0.5rem;
+            cursor: pointer;
+            background: white;
+            border: 1.5px solid var(--light-blue);
+            transition: all 0.2s;
+        }
+
+        .question-nav-item.current {
+            background: var(--gradient-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .question-nav-item.solved {
+            background: var(--gradient-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+
+        .question-nav-item.visited {
+            background: var(--gradient-orange);
+            color: white;
+            border-color: var(--accent-orange);
+        }
+
+        .question-nav-item.out-of-syllabus {
+            background: var(--gradient-red);
+            color: white;
+            border-color: var(--accent-red);
+        }
+
+        .question-container {
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--dark-blue);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .option {
+            padding: 5px 8px;
+            border: 1.5px solid var(--light-blue);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            background: #f8fafc;
+            font-size: 0.7rem;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: var(--primary-blue);
+            background: #e0f2fe;
+        }
+
+        .option.selected {
+            border-color: var(--primary-blue);
+            background: #dbeafe;
+        }
+
+        .option.correct {
+            border-color: var(--accent-green);
+            background: #d1fae5;
+        }
+
+        .option.incorrect {
+            border-color: var(--accent-red);
+            background: #fee2e2;
+        }
+
+        .option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .reasoning {
+            background: #f8fafc;
+            border-radius: 5px;
+            padding: 8px;
+            margin-top: 8px;
+            display: none;
+            border-left: 3px solid var(--primary-blue);
+            font-size: 0.7rem;
+        }
+
+        .reasoning-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--dark-blue);
+            font-size: 0.75rem;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .nav-btn {
+            padding: 5px 7px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: white;
+        }
+
+        .btn-skip {
+            background: var(--gradient-orange);
+            color: white;
+        }
+
+        .btn-reasoning {
+            background: var(--gradient-purple);
+            color: white;
+        }
+
+        .btn-reasoning.disabled {
+            background: #dc3545;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-reasoning.disabled:hover {
+            background: #dc3545;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-out-of-syllabus {
+            background: var(--gradient-red);
+            color: white;
+        }
+
+        .btn-submit {
+            background: var(--gradient-green);
+            color: white;
+        }
+
+        /* Results Page */
+        .results-header-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .results-header-buttons .btn {
+            padding: 4px 6px;
+            font-size: 0.65rem;
+            width: 100%;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-blue);
+        }
+
+        .result-card h2 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--dark-blue);
+        }
+
+        .result-card table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .result-card th, .result-card td {
+            padding: 5px;
+            border: 1px solid #dbeafe;
+            text-align: left;
+        }
+
+        .result-card th {
+            background-color: var(--light-blue);
+            font-weight: 600;
+        }
+
+        .result-card td {
+            background-color: #f8fafc;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        /* All MCQs Page */
+        .all-mcqs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .all-mcq-item {
+            padding: 10px;
+            border: 1px solid var(--light-blue);
+            border-radius: 8px;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .all-mcq-item .question-text {
+            color: var(--dark-blue);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .all-mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .all-mcq-option {
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .all-mcq-option.correct {
+            background: #d1fae5;
+            color: var(--accent-green);
+            font-weight: 600;
+            border-color: #a7f3d0;
+        }
+
+        .all-mcq-reasoning {
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: #4b5563;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .all-mcq-reasoning strong {
+            color: var(--dark-blue);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .quiz-header {
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-start;
+            }
+            
+            .navigation-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .compact-contact-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .timer-container {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 5px;
+                justify-content: flex-end;
+                width: 100%;
+            }
+            
+            .quiz-title-container {
+                width: 100%;
+            }
+            
+            .dmc-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .dmc-grades, .dmc-performance-bars {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .dmc-watermark {
+                font-size: 2rem;
+            }
+            
+            .promo-banner {
+                padding: 12px;
+            }
+            
+            .promo-banner h2 {
+                font-size: 0.8rem;
+            }
+            
+            .promo-banner p {
+                font-size: 0.55rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>PreMium Nexus Testing Service</h1>
+            <p>Excellence in Educational Assessment</p>
+        </div>
+
+        <div id="signin-page" class="page active">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Access Test</h2>
+            <p>Sign in or use your access code</p>
+            
+            <div class="main-page-buttons">
+                <button class="btn btn-primary" onclick="showQuizAccessForm()">
+                    <i class="fas fa-lock"></i>
+                    <span>Sign In with Quiz Access Code</span>
+                </button>
+                <button class="btn btn-primary" onclick="showRegistrationPage()">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Sign Up to Get Quiz Access</span>
+                </button>
+                <button class="btn btn-purple" onclick="showDeveloperAccessForm()">
+                    <i class="fas fa-code"></i>
+                    <span>Developer Access</span>
+                </button>
+            </div>
+            
+            <div id="developer-access-form" class="quiz-access-section">
+                <h3>Developer Login</h3>
+                <div class="password-container input-container">
+                    <input type="password" id="developerPassword" class="form-input" placeholder="Enter the Developer Password">
+                    <i class="fas fa-eye-slash input-icon" id="toggleDeveloperPassword"></i>
+                </div>
+                <button class="btn btn-purple" onclick="checkDeveloperPassword()">
+                    <span>Log In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div id="dev-error-box" class="error-box">
+                    Invalid developer password.
+                </div>
+            </div>
+            
+            <div id="quiz-access-form" class="quiz-access-section">
+                <h3>Enter Quiz Access Code</h3>
+                <div class="password-container input-container">
+                    <input type="password" id="quizAccessCode" class="form-input" placeholder="Enter your 12-Digit Quiz Access Code here">
+                    <i class="fas fa-eye-slash input-icon" id="toggleQuizAccessCode"></i>
+                </div>
+                <button class="btn btn-primary" onclick="checkQuizAccessCode()">
+                    <span>Access Quiz</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div id="quiz-error-box" class="error-box">
+                    Invalid quiz access code.
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="registration-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Student Registration</h2>
+            <p>Please provide your details to register</p>
+            
+            <div class="form-group">
+                <label class="form-label">Student Name</label>
+                <input type="text" id="studentName" class="form-input" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Father Name</label>
+                <input type="text" id="fatherName" class="form-input" placeholder="Enter your father's name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter your email address">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mobile Number (WhatsApp)</label>
+                <input type="tel" id="mobile" class="form-input" placeholder="+92XXXXXXXXXX">
+            </div>
+            <button class="btn btn-primary" onclick="validateRegistrationForm()">
+                <span>Proceed to Payment</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div id="payment-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Payment Details</h2>
+            <p>Please complete the payment to receive your access code</p>
+            
+            <div class="payment-info">
+                <h3>Payment Information</h3>
+                <p>Please make payment through our official payment methods. After payment, you will receive an access code.</p>
+                <p>Contact us on WhatsApp at <a id="payment-whatsapp-link" href="https://wa.me/923247012882" style="color: var(--accent-green); text-decoration: none;">+923247012882</a> for payment details.</p>
+                <p style="margin-top: 8px; font-weight: bold;">Account Holder: <span id="payment-account-holder">Account Holder Name</span></p>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Transaction ID</label>
+                <input type="text" id="transactionId" class="form-input" placeholder="Enter transaction ID">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Your Account Holder Name</label>
+                <input type="text" id="accountHolderName" class="form-input" placeholder="Enter your payment account name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount Sent</label>
+                <input type="number" id="amountSent" class="form-input" placeholder="Enter amount">
+            </div>
+            <div class="acknowledgment-checkbox">
+                <input type="checkbox" id="acknowledgment">
+                <label for="acknowledgment">I acknowledge that I have submitted the correct information and payment.</label>
+            </div>
+            
+            <button class="btn btn-primary" onclick="submitPayment()">
+                <span>Submit Payment Info</span>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <div id="quiz-access-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+            
+            <h2>Quiz Access</h2>
+            <p>A Quiz Access Code will be sent to your registered mobile number after we receive and verify your payment.</p>
+
+            <div class="password-container input-container">
+                <input type="password" id="quizAccessFinal" class="form-input" placeholder="Enter your 12-Digit Quiz Access Code here">
+                <i class="fas fa-eye-slash input-icon" id="toggleQuizAccessFinal"></i>
+            </div>
+            
+            <button class="btn btn-primary" onclick="accessQuiz()">
+                <span>Access Quiz</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <div id="final-quiz-error-box" class="error-box">
+                Invalid quiz access code.
+            </div>
+        </div>
+        
+        <div id="quiz-page" class="page">
+            <div class="promo-banner">
+                <h2>Unlock Your Potential with PreMium Nexus Testing Service</h2>
+                <p>Boost your preparation with PreMium Nexus Testing Service's realistic online tests, crafted by experts to mirror the actual exam's pattern and challenge. Experience instant feedback, detailed analysis, and flexible online access – your pathway to confidence and success!</p>
+            </div>
+
+            <div class="quiz-header">
+                <div class="quiz-title-container">
+                    <h2 id="quiz-title"></h2>
+                    <div class="quiz-info">
+                        <span>Subject: <span id="quiz-subject">English Grammar</span></span>
+                        <span>Per MCQ: <span id="per-mcq-time">1</span> Minute</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timer-container">
+                <div class="timer" id="question-timer">60</div>
+                <div class="timer total-timer" id="timer">40:00</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="quiz-progress"></div>
+            </div>
+
+            <div class="question-nav" id="question-nav"></div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text"></div>
+                <div class="options-container" id="options-container"></div>
+                <div class="reasoning" id="reasoning">
+                    <div class="reasoning-title">Explanation:</div>
+                    <div id="reasoning-text"></div>
+                </div>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="nav-btn btn-back" onclick="navigateQuestion('prev')">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button class="nav-btn btn-next" onclick="navigateQuestion('next')">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="nav-btn btn-skip" onclick="navigateQuestion('skip')">
+                    <i class="fas fa-forward"></i> Skip
+                </button>
+                <button class="nav-btn btn-out-of-syllabus" onclick="markOutOfSyllabus()">
+                    <i class="fas fa-ban"></i> Out of Syllabus
+                </button>
+                <button class="nav-btn btn-reasoning disabled" id="reasoning-btn" onclick="toggleReasoning()">
+                    <i class="fas fa-lightbulb"></i> Reasoning
+                </button>
+                <button class="nav-btn btn-submit" onclick="submitTest()">
+                    Submit <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="results-page" class="page">
+            <div class="results-header-buttons">
+                <a id="website-link" href="#" target="_blank" class="btn btn-primary"><i class="fas fa-globe"></i> Website</a>
+                <a id="whatsapp-contact-link" href="#" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Whatsapp Contact</a>
+                <a id="whatsapp-community-link" href="#" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Whatsapp Community</a>
+            </div>
+            
+            <div class="result-card">
+                <h2>Student Information</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-info-table"></tbody>
+                </table>
+            </div>
+
+            <div class="result-card">
+                <h2>Test Results</h2>
+                <table>
+                    <tbody id="quiz-results-table"></tbody>
+                </table>
+            </div>
+            
+            <div class="result-actions">
+                <button class="btn btn-primary" onclick="restartTest()">
+                    <i class="fas fa-redo"></i> Retake Full Test
+                </button>
+                <button class="btn btn-primary" onclick="retakeIncorrect()">
+                    <i class="fas fa-bolt"></i> Retake Incorrect Questions
+                </button>
+                <button class="btn btn-primary" onclick="viewAllMcqs()">
+                    <i class="fas fa-clipboard-list"></i> View All MCQs
+                </button>
+            </div>
+        </div>
+
+        <div id="all-mcqs-page" class="page">
+            <h2>All MCQs and Solutions</h2>
+            <div class="all-mcqs-list" id="all-mcqs-list"></div>
+            <button class="btn btn-primary" onclick="showPage('results-page')">
+                <i class="fas fa-arrow-left"></i> Back to Results
+            </button>
+        </div>
+    </div>
+    
+    <script>
+// Quiz data - Chemistry 
+const quizData_Med_Rea_001 = [
+    {
+        question: "Liquid fluidity combined with a definite volume primarily indicates:",
+        options: [
+            "Particles with minimal kinetic energy and strong intermolecular bonds.",
+            "Constant molecular vibration within fixed lattice points.",
+            "Molecular motion by sliding, with significant cohesive forces.",
+            "Complete molecular disorder and negligible intermolecular attraction."
+        ],
+        correctAnswer: 2,
+        reasoning: "KMT states liquid molecules slide over each other, allowing flow, and have strong intermolecular forces, maintaining definite volume, properties intermediate to solids and gases."
+    },
+    {
+        question: "Liquid incompressibility arises from:",
+        options: [
+            "Extensive long-range order in molecular arrangement.",
+            "Strong repulsive forces among constituent particles.",
+            "Minimal empty intermolecular spaces.",
+            "Rapid, random molecular translational motion."
+        ],
+        correctAnswer: 2,
+        reasoning: "The KMT postulates for liquids explicitly state that molecules are close together with negligible empty spaces, making them difficult to compress."
+    },
+    {
+        question: "Volume increase measured without container compensation represents:",
+        options: [
+            "Relative thermal stability.",
+            "Absolute volumetric change.",
+            "Anomalous specific expansion.",
+            "Apparent observed expansion."
+        ],
+        correctAnswer: 3,
+        reasoning: "The PDF defines 'Apparent expansion' as the observed expansion when heated in a container, specifically 'without accounting for container expansion'."
+    },
+    {
+        question: "A substance requiring high energy for atomic dissociation but low energy for phase change implies:",
+        options: [
+            "Predominance of strong metallic bonding.",
+            "Weak intramolecular forces and strong intermolecular forces.",
+            "Strong intramolecular and weak intermolecular forces.",
+            "Absence of any significant attractive forces."
+        ],
+        correctAnswer: 2,
+        reasoning: "High energy for dissociation implies strong intramolecular bonds (e.g., covalent, 930 kJ/mol), while low energy for phase change implies weak intermolecular forces (e.g., hydrogen bonding, 40.7 kJ/mol), as 'much less energy is needed to evaporate a liquid (overcome IMFs) than to break chemical bonds'."
+    },
+    {
+        question: "Enhanced evaporation rate at elevated temperatures stems from:",
+        options: [
+            "Increased intermolecular attraction.",
+            "Decreased kinetic energy distribution among molecules.",
+            "Greater fraction of molecules overcoming cohesive forces.",
+            "Reduction in the liquid's surface tension."
+        ],
+        correctAnswer: 2,
+        reasoning: "The mechanism of evaporation states that molecules with higher kinetic energy overcome intermolecular forces and escape. Higher temperatures increase the fraction of molecules with sufficient kinetic energy."
+    },
+    {
+        question: "Defining characteristic of equilibrium vapor pressure is:",
+        options: [
+            "Total absence of liquid molecules at the surface.",
+            "Constant vapor volume despite ongoing phase changes.",
+            "Equal rates of liquid vaporization and vapor liquefaction.",
+            "Vapor pressure exceeding external atmospheric pressure."
+        ],
+        correctAnswer: 2,
+        reasoning: "Vapour pressure is defined as the pressure exerted by vapours when 'the rate of evaporation equals the rate of condensation' in a closed container, establishing dynamic equilibrium."
+    },
+    {
+        question: "Boiling a liquid under significantly reduced external pressure implies:",
+        options: [
+            "An increase in the liquid's specific heat capacity.",
+            "A boiling temperature higher than its normal boiling point.",
+            "A boiling temperature lower than its normal boiling point.",
+            "No change in boiling temperature, only a faster process."
+        ],
+        correctAnswer: 2,
+        reasoning: "The boiling point is the temperature at which internal vapour pressure equals external pressure. Reduced external pressure means a lower vapour pressure is required, which is achieved at a lower temperature."
+    },
+    {
+        question: "A pressure cooker facilitates faster cooking by:",
+        options: [
+            "Reducing the internal atmospheric pressure.",
+            "Increasing the specific heat capacity of water.",
+            "Raising the boiling temperature of the liquid.",
+            "Decreasing the liquid's intermolecular forces."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states that a pressure cooker 'increases external pressure, raising the boiling point of water above 100°C, leading to faster cooking'."
+    },
+    {
+        question: "A prerequisite for a molecule to form hydrogen bonds is:",
+        options: [
+            "A large molecular weight and non-polar character.",
+            "Hydrogen directly attached to a strongly electronegative atom.",
+            "Presence of noble gas elements within its structure.",
+            "Symmetrical arrangement of all constituent atoms."
+        ],
+        correctAnswer: 1,
+        reasoning: "Hydrogen bonding occurs 'when hydrogen is bonded to a highly electronegative atom (fluorine, oxygen, or nitrogen)'."
+    },
+    {
+        question: "Disrupting hydrogen bonds requires energy significantly less than:",
+        options: [
+            "Overcoming typical London dispersion forces.",
+            "Vaporizing a non-polar molecular liquid.",
+            "Breaking a covalent bond within a molecule.",
+            "Initiating a phase transition for an ionic solid."
+        ],
+        correctAnswer: 2,
+        reasoning: "The strength comparison explicitly states hydrogen bonds are 'weaker than covalent bonds' and 'about 5% as strong as a single covalent bond'."
+    },
+    {
+        question: "The diminished acidity of hydrofluoric acid compared to other hydrohalic acids results from:",
+        options: [
+            "Its high electron affinity for fluoride ions.",
+            "Strong hydrogen bonding impeding proton release.",
+            "The extremely low electronegativity of fluorine.",
+            "Its non-polar molecular structure."
+        ],
+        correctAnswer: 1,
+        reasoning: "The PDF states 'H-F is a weaker acid... because H is \"entrapped\" by strong hydrogen bonding in H-F'."
+    },
+    {
+        question: "For an organic molecule to demonstrate high aqueous solubility, it must typically:",
+        options: [
+            "Possess a large non-polar hydrocarbon chain.",
+            "Be incapable of forming intermolecular attractions.",
+            "Be able to form hydrogen bonds with water.",
+            "Have a very high molecular mass."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document mentions that 'Organic substances that can form hydrogen bonds with water (e.g., ethyl alcohol) are soluble in water'."
+    },
+    {
+        question: "Ice's lower density than liquid water is fundamentally due to:",
+        options: [
+            "Molecular dissociation upon freezing.",
+            "Randomization of hydrogen bond networks.",
+            "Formation of a more open, hydrogen-bonded structure.",
+            "Increased kinetic energy of water molecules."
+        ],
+        correctAnswer: 2,
+        reasoning: "The structure of ice is described as 'a more regular arrangement with permanent H-bonds, creating empty spaces. This leads to an increase in volume and a decrease in density'."
+    },
+    {
+        question: "Cooling liquid water from 10°C to 1°C causes:",
+        options: [
+            "Continuous, uniform volume contraction.",
+            "Continuous, uniform volume expansion.",
+            "Initial contraction followed by subsequent expansion.",
+            "No significant change in its overall volume."
+        ],
+        correctAnswer: 2,
+        reasoning: "The anomalous behaviour of water notes it 'contracts in volume when cooled to 4°C, but then expands when cooled from 4°C to 0°C'."
+    },
+    {
+        question: "The essential defining characteristics of a liquid are:",
+        options: [
+            "Indefinite volume and indefinite shape.",
+            "Definite volume and indefinite shape.",
+            "Indefinite volume and definite shape.",
+            "Definite volume and definite shape."
+        ],
+        correctAnswer: 1,
+        reasoning: "The definition states: 'A liquid is a state of matter with a definite volume but no definite shape'."
+    },
+    {
+        question: "Liquid diffusion's relative slowness is attributable to:",
+        options: [
+            "Absence of intermolecular forces.",
+            "Extremely high kinetic energy of molecules.",
+            "Strong intermolecular forces and limited free space.",
+            "Static, ordered arrangement of particles."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document explains that 'Diffusion is slow due to IMFs and small empty spaces'."
+    },
+    {
+        question: "A fluid substance with constant molecular motion and strong intermolecular forces belongs to which state?",
+        options: [
+            "Gaseous state.",
+            "Solid state.",
+            "Liquid state.",
+            "Plasma state."
+        ],
+        correctAnswer: 2,
+        reasoning: "KMT postulates for liquids describe molecules in 'constant motion by sliding over each other' (fluid) and having 'stronger intermolecular forces than in gases'."
+    },
+    {
+        question: "Molten electrolytes exhibit which primary cohesive force?",
+        options: [
+            "Metallic bonding.",
+            "Hydrogen bonding.",
+            "Ionic forces.",
+            "Van der Waals' forces."
+        ],
+        correctAnswer: 2,
+        reasoning: "The introduction section on cohesive forces in liquids lists 'ionic (molten electrolytes)'."
+    },
+    {
+        question: "The stability of the DNA double-helix is fundamentally maintained by:",
+        options: [
+            "Covalent phosphodiester bonds.",
+            "Intramolecular ionic attractions.",
+            "Intermolecular hydrogen bonds.",
+            "Strong metallic bonding between bases."
+        ],
+        correctAnswer: 2,
+        reasoning: "Applications of hydrogen bonding include: 'Stabilizes the structures of large biological molecules like proteins (spiral helix) and DNA (double-helix ladder)'."
+    },
+    {
+        question: "Two liquids with comparable molecular masses exhibit significantly different boiling points due to:",
+        options: [
+            "Differences in their kinetic energy distributions.",
+            "Variations in their specific heat capacities.",
+            "Disparities in their intermolecular force strengths.",
+            "Divergent atmospheric pressures at measurement."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Liquids with stronger intermolecular forces have higher boiling points'. If molecular mass is similar, then IMFs are the primary distinguishing factor for boiling points."
+    },
+    {
+        question: "A solid characterized by long-range internal order is known as:",
+        options: [
+            "An amorphous solid, lacking distinct shape.",
+            "A crystalline solid, with a definite geometrical shape.",
+            "A pseudo-solid, exhibiting fluid properties.",
+            "A meta-solid, rapidly changing forms."
+        ],
+        correctAnswer: 1,
+        reasoning: "Crystalline solids are defined as having constituent particles arranged in a 'regular, repeating three-dimensional order' and possessing 'rigid and definite geometrical shapes'."
+    },
+    {
+        question: "Optimized formation of crystalline solids from liquid necessitates:",
+        options: [
+            "Rapid removal of heat.",
+            "Rapid solidification process.",
+            "Gradual reduction in temperature.",
+            "Application of high external pressure."
+        ],
+        correctAnswer: 2,
+        reasoning: "Crystalline solids are 'Typically produced by slow cooling of a liquid', implying gradual reduction in temperature."
+    },
+    {
+        question: "A crystal divisible into two identical mirror halves possesses a:",
+        options: [
+            "Center of inversion.",
+            "Plane of symmetry.",
+            "Diad axis.",
+            "Hexagonal axis."
+        ],
+        correctAnswer: 1,
+        reasoning: "A 'Plane of Symmetry' is defined as 'An imaginary plane that divides a crystal into two exact mirror images'."
+    },
+    {
+        question: "Which symmetry element is fundamentally limited to a single instance per crystal?",
+        options: [
+            "Plane of symmetry.",
+            "Axis of symmetry.",
+            "Center of symmetry.",
+            "Diad axis."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'A crystal can have multiple planes or axes of symmetry but only one center of symmetry'."
+    },
+    {
+        question: "A substance exhibiting a constant temperature during its entire solid-to-liquid transition indicates:",
+        options: [
+            "Its amorphous nature.",
+            "Its composition as a mixed solid.",
+            "Its pure crystalline form.",
+            "Its rapid decomposition."
+        ],
+        correctAnswer: 2,
+        reasoning: "Pure crystalline solids have 'sharp and definite melting points' where 'The temperature remains constant during the melting process until all particles become mobile'."
+    },
+    {
+        question: "Crystalline solids fracture along specific planes due to:",
+        options: [
+            "Random distribution of internal stresses.",
+            "Irregularity in their atomic arrangement.",
+            "Existence of weak, straight faces in the atomic structure.",
+            "High kinetic energy of constituent particles."
+        ],
+        correctAnswer: 2,
+        reasoning: "The definition of 'Cleavage Plane' states that crystals 'split along straight, weak faces (due to atomic structure)'."
+    },
+    {
+        question: "Altering crystal growth conditions may change its habit, but which property remains invariant?",
+        options: [
+            "Its overall volume.",
+            "Its total surface area.",
+            "Its characteristic interfacial angles.",
+            "Its rate of dissolution."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document notes that 'Regardless of external appearance or size, the interfacial angles between faces are always the same for a given substance'."
+    },
+    {
+        question: "Direction-dependent physical properties in a solid stem from:",
+        options: [
+            "Its amorphous internal arrangement.",
+            "Its perfectly isotropic nature.",
+            "Its regular, ordered particle arrangement.",
+            "Its uniform density across all axes."
+        ],
+        correctAnswer: 2,
+        reasoning: "Anisotropy is defined as 'showing different intensities... of physical properties... in different directions', and it's stated that 'Crystalline substances are anisotropic due to their regular and well-ordered arrangement of particles'."
+    },
+    {
+        question: "The minimum structural entity conveying all crystal lattice information is:",
+        options: [
+            "The entire crystal habit.",
+            "A single lattice point.",
+            "The unit cell.",
+            "A cleavage plane."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Unit Cell' is described as 'the basic repeating structural unit... It shows the 3D pattern of the entire lattice and carries complete information about the crystal'."
+    },
+    {
+        question: "A cubic unit cell is geometrically characterized by:",
+        options: [
+            "All edge lengths differing, all angles equal to 90°.",
+            "All edge lengths equal, all angles equal to 90°.",
+            "All edge lengths equal, all angles differing.",
+            "Three unequal axes, two angles equal, one different."
+        ],
+        correctAnswer: 1,
+        reasoning: "Cubic unit cells are defined by '(a=b=c, α=β=γ=90°)'."
+    },
+    {
+        question: "A defining feature of the simple cubic lattice is:",
+        options: [
+            "Particles at corners and face centers.",
+            "Maximum packing efficiency.",
+            "Only corner particles, leading to maximal vacant space.",
+            "One particle at the body center only."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Simple Cubic Lattice' is described as having 'Particles only at the corners... (Maximum vacant space, rarely found)'."
+    },
+    {
+        question: "The coordination number for either cation or anion in an NaCl crystal is:",
+        options: [
+            "4",
+            "6",
+            "8",
+            "12"
+        ],
+        correctAnswer: 1,
+        reasoning: "For NaCl, the 'Coordination Number: Each Na+ ion is surrounded by 6 Cl- ions, and each Cl- ion is surrounded by 6 Na+ ions, so the coordination number for each ion is 6'."
+    },
+    {
+        question: "Energy released during the formation of an ionic crystal from gaseous ions is termed:",
+        options: [
+            "Ionization energy.",
+            "Electron affinity.",
+            "Lattice energy.",
+            "Enthalpy of sublimation."
+        ],
+        correctAnswer: 2,
+        reasoning: "Lattice Energy is defined as 'The amount of energy released when one mole of an ionic crystal is formed from its constituent gaseous ions of opposite charges'."
+    },
+    {
+        question: "An ionic compound with particularly high lattice energy implies:",
+        options: [
+            "Large ion sizes and low ionic charges.",
+            "Small ion sizes and high ionic charges.",
+            "Equal cation and anion radii.",
+            "Non-polar character of its constituent ions."
+        ],
+        correctAnswer: 1,
+        reasoning: "Factors affecting lattice energy state it 'Increases with increasing charge of ions and decreasing size of ions'."
+    },
+    {
+        question: "Ionic solids are electrical insulators in solid form but conductors when molten because:",
+        options: [
+            "Their crystal lattice breaks down completely.",
+            "Ions become free to move in the molten state.",
+            "Electrons are released from ionic bonds.",
+            "Covalent bonds form between ions."
+        ],
+        correctAnswer: 1,
+        reasoning: "Ionic solids 'Do not conduct heat/electricity as solids (ions are fixed), but conduct in molten state or when dissolved in water (ions become mobile)'."
+    },
+    {
+        question: "A solid characterized by softness and a low melting point is typically:",
+        options: [
+            "An ionic solid.",
+            "A metallic solid.",
+            "A molecular solid.",
+            "A network covalent solid."
+        ],
+        correctAnswer: 2,
+        reasoning: "Properties of molecular solids include: 'Soft. Low melting points (mostly below 200°C)'."
+    },
+    {
+        question: "Two distinct compounds sharing identical crystal forms and atomic ratios imply:",
+        options: [
+            "Allotropy, with identical chemical properties.",
+            "Polymorphism, with different physical properties.",
+            "Isomorphism, with different physical properties.",
+            "Identical chemical structures."
+        ],
+        correctAnswer: 2,
+        reasoning: "Isomorphism describes 'two or more different crystalline substances have the same crystalline shapes' and 'typically have the same atomic ratio'. It explicitly states, 'Despite similar shapes, their physical and chemical properties are different'."
+    },
+    {
+        question: "Polymorphic forms of a substance are characterized by:",
+        options: [
+            "Different chemical compositions and different physical properties.",
+            "Identical chemical properties but different physical properties.",
+            "Identical physical properties but different chemical properties.",
+            "Different atomic ratios within their unit cells."
+        ],
+        correctAnswer: 1,
+        reasoning: "Polymorphs are defined as 'the same chemical properties but different physical properties due to varying particle arrangements'."
+    },
+    {
+        question: "Allotropy is conceptually understood as:",
+        options: [
+            "A broader term encompassing all solid-state phase changes.",
+            "The occurrence of polymorphic forms exclusively for compounds.",
+            "A specific instance of polymorphism, limited to elements.",
+            "The ability of a substance to form amorphous structures."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document explicitly states, 'Allotropy is a specific case of polymorphism for elements'."
+    },
+    {
+        question: "At its transition temperature, a substance's polymorphs:",
+        options: [
+            "Rapidly convert entirely to one form.",
+            "Undergo irreversible chemical reactions.",
+            "Coexist in dynamic equilibrium.",
+            "Form a new, distinct chemical compound."
+        ],
+        correctAnswer: 2,
+        reasoning: "Transition Temperature is defined as 'the temperature where more than one crystalline form of a given substance can coexist in equilibrium'."
+    },
+    {
+        question: "Compared to gases, liquid molecules experience fewer collisions primarily due to:",
+        options: [
+            "Significantly higher kinetic energy.",
+            "Much greater free volume.",
+            "Restricted movement from strong intermolecular forces.",
+            "Complete absence of molecular disorder."
+        ],
+        correctAnswer: 2,
+        reasoning: "KMT for liquids states molecules have 'less free movement than gas molecules due to strong IMFs. This leads to minimum collisions'."
+    },
+    {
+        question: "Upon sealing a liquid in a container, the initial state is marked by:",
+        options: [
+            "Condensation rate exceeding evaporation rate.",
+            "Simultaneous cessation of both evaporation and condensation.",
+            "Evaporation rate surpassing condensation rate.",
+            "Immediate establishment of equilibrium."
+        ],
+        correctAnswer: 2,
+        reasoning: "The mechanism of vapour pressure explains that 'Initially, evaporation > condensation'."
+    },
+    {
+        question: "Longer cooking times for food at high altitudes result from:",
+        options: [
+            "Increased heat capacity of the cooking water.",
+            "Higher boiling point, consuming more energy.",
+            "Lower boiling temperature, providing less intense heat.",
+            "Enhanced specific heat transfer to the food."
+        ],
+        correctAnswer: 2,
+        reasoning: "At higher altitudes, water boils at lower temperatures (e.g., 72°C), meaning the cooking water itself is at a lower temperature, thus transferring less thermal energy to the food per unit time and requiring longer cooking."
+    },
+    {
+        question: "The essential atomic property driving hydrogen bond formation is:",
+        options: [
+            "Atomic radius.",
+            "Ionization energy.",
+            "Electronegativity difference.",
+            "Metallic character."
+        ],
+        correctAnswer: 2,
+        reasoning: "The mechanism states a 'highly electronegative atom strongly attracts electrons, leaving the hydrogen atom with a significant partial positive charge', which is a direct consequence of a large electronegativity difference."
+    },
+    {
+        question: "The characteristic helical structure of proteins is primarily stabilized by:",
+        options: [
+            "Strong intramolecular covalent bonds.",
+            "Intermolecular metallic interactions.",
+            "Hydrogen bonding between peptide groups.",
+            "London dispersion forces only."
+        ],
+        correctAnswer: 2,
+        reasoning: "Applications of hydrogen bonding include stabilizing 'structures of large biological molecules like proteins (spiral helix)'."
+    },
+    {
+        question: "Ice floating on water is vital for aquatic life because it:",
+        options: [
+            "Increases the salinity of the underlying water.",
+            "Prevents the entire body of water from freezing solid.",
+            "Enhances light penetration to deeper water.",
+            "Accelerates the dissolution of atmospheric gases."
+        ],
+        correctAnswer: 1,
+        reasoning: "The document states 'causing ice to float. This is a crucial property for aquatic life'. Floating ice forms an insulating layer, protecting the aquatic environment below from freezing."
+    },
+    {
+        question: "The primary cohesive force operating in a typical non-polar organic liquid is:",
+        options: [
+            "Ionic bonding.",
+            "Hydrogen bonding.",
+            "Van der Waals' forces.",
+            "Metallic bonding."
+        ],
+        correctAnswer: 2,
+        reasoning: "Cohesive forces in liquids include 'Van der Waals' forces (organic liquids)'. Non-polar liquids primarily exhibit London Dispersion forces, which are a type of Van der Waals' force."
+    },
+    {
+        question: "Evaporation below boiling point is possible due to:",
+        options: [
+            "Uniform distribution of kinetic energy.",
+            "All molecules possessing sufficient energy to escape.",
+            "Uneven kinetic energy distribution among molecules.",
+            "The complete absence of intermolecular forces."
+        ],
+        correctAnswer: 2,
+        reasoning: "The mechanism of evaporation states that 'energy is not equally distributed. Molecules with higher kinetic energy overcome IMFs and escape from the surface'."
+    },
+    {
+        question: "At a constant temperature, liquid molecules possess kinetic energy that is:",
+        options: [
+            "Identical to that of gaseous molecules.",
+            "Lower than that of solid molecules.",
+            "Greater than that of solid molecules.",
+            "Irrelevant to phase transitions."
+        ],
+        correctAnswer: 2,
+        reasoning: "KMT postulates that 'Liquid molecules have kinetic energy greater than solids but less than gases at a given temperature'."
+    },
+    {
+        question: "A distinguishing property of liquids relative to gases is their:",
+        options: [
+            "Significantly lower density.",
+            "Considerably higher compressibility.",
+            "Much greater density.",
+            "Complete molecular disorder."
+        ],
+        correctAnswer: 2,
+        reasoning: "The introduction states liquids 'share similarities in density and compressibility' with solids, implying much higher density and lower compressibility than gases due to molecules being 'close together with negligible empty spaces'."
+    },
+    {
+        question: "The O-H bond within a water molecule represents a force that is:",
+        options: [
+            "A weak intermolecular attraction.",
+            "A strong intramolecular covalent bond.",
+            "An ionic interaction with partial charges.",
+            "A metallic bond of moderate strength."
+        ],
+        correctAnswer: 1,
+        reasoning: "The 'Strength Comparison' section explicitly mentions 'O-H covalent bond in water: 930 kJ/mol' as an example of an intramolecular force, which is 'significantly stronger' than IMFs."
+    },
+    {
+        question: "To accelerate a liquid's evaporation rate without heat, one should maximize its:",
+        options: [
+            "Volume.",
+            "Depth.",
+            "Surface area.",
+            "Viscosity."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Rate of Evaporation' section lists 'Surface area: Larger surface area, faster evaporation'."
+    },
+    {
+        question: "The normal boiling point of a liquid is achieved when its vapor pressure equals:",
+        options: [
+            "Twice the external pressure.",
+            "760 mmHg external pressure.",
+            "The liquid's surface tension.",
+            "Half its critical pressure."
+        ],
+        correctAnswer: 1,
+        reasoning: "The boiling point is when 'vapour pressure... becomes equal to the external pressure'. One atmospheric pressure is given as '760 mmHg at sea level', which is the standard for a 'normal' boiling point."
+    },
+    {
+        question: "During boiling, additional heat energy supplied to a liquid primarily:",
+        options: [
+            "Increases the liquid's temperature.",
+            "Enhances the molecular kinetic energy further.",
+            "Overcomes intermolecular forces for vaporization.",
+            "Increases the atmospheric pressure."
+        ],
+        correctAnswer: 2,
+        reasoning: "At the boiling point, 'Any further heating at this point goes into breaking intermolecular forces and converting liquid to vapour, keeping the temperature constant'."
+    },
+    {
+        question: "Hydrogen bonding between HF molecules involves which specific interaction?",
+        options: [
+            "Covalent sharing of electrons between H and F atoms.",
+            "Attraction between the partially positive H and the lone pair on F of another molecule.",
+            "Ionic transfer of electrons from H to F.",
+            "Induced dipole attraction between non-polar HF molecules."
+        ],
+        correctAnswer: 1,
+        reasoning: "The mechanism of H-bonding describes the 'hydrogen atom with a significant partial positive charge, which then attracts the lone pair of electrons on an electronegative atom of an adjacent molecule'. The example given is 'H-bonds form between the H of one HF molecule and the F of another'."
+    },
+    {
+        question: "The adhesive property of glue is attributed to its ability to form:",
+        options: [
+            "Strong ionic bonds with surfaces.",
+            "Extensive metallic interactions.",
+            "Hydrogen bonds with the substrate.",
+            "Permanent covalent networks."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Applications and Effects of Hydrogen Bonding' section lists 'adhesive action of paints/dyes, sticking action of glue/honey' as roles of hydrogen bonding."
+    },
+    {
+        question: "Instruments used to quantify vapor pressure, by relation to atmospheric pressure, include:",
+        options: [
+            "Spectrophotometers and chromatographs.",
+            "pH meters and conductimeters.",
+            "Barometers and manometers.",
+            "Calorimeters and densitometers."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Barometers and manometers are used to measure atmospheric pressure, which is related to vapour pressure concepts'."
+    },
+    {
+        question: "A liquid's ability to flow and conform to container shape is best explained by:",
+        options: [
+            "Strong, fixed intermolecular bonds.",
+            "Molecular vibration within a rigid lattice.",
+            "Molecules sliding past one another.",
+            "Complete absence of molecular motion."
+        ],
+        correctAnswer: 2,
+        reasoning: "The KMT states 'Molecules are in constant motion by sliding over each other, allowing liquids to flow and take the shape of the container (no definite shape)'."
+    },
+    {
+        question: "Liquid diffusion is significantly slower than gas diffusion due to:",
+        options: [
+            "Higher kinetic energy in liquids.",
+            "Absence of intermolecular forces in liquids.",
+            "Stronger IMFs and less free space in liquids.",
+            "Greater molecular disorder in liquids."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states liquid diffusion 'is slow due to IMFs and small empty spaces'. Compared to gases which have weak IMFs and large empty spaces, this explains the difference in speed."
+    },
+    {
+        question: "Dipole-dipole interactions and London dispersion forces are collectively known as:",
+        options: [
+            "Covalent bonds.",
+            "Ionic bonds.",
+            "Van der Waals' forces.",
+            "Metallic bonds."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Intermolecular forces (IMFs)' section mentions 'hydrogen bonding, dipole-dipole interactions, London dispersion forces, collectively known as Van der Waals' forces'."
+    },
+    {
+        question: "A crystal is defined by its particles exhibiting:",
+        options: [
+            "Complete randomness and fluidity.",
+            "Irregular, short-range order.",
+            "Regular, repetitive three-dimensional arrangement.",
+            "Two-dimensional planar patterns only."
+        ],
+        correctAnswer: 2,
+        reasoning: "A crystal is defined as 'A solid object with a definite geometrical shape where particles have a regular and repetitive three-dimensional arrangement'."
+    },
+    {
+        question: "Introducing an impurity like urea to NaCl crystal growth can:",
+        options: [
+            "Change its inherent chemical composition.",
+            "Alter its characteristic interfacial angles.",
+            "Modify its external habit.",
+            "Increase its lattice energy significantly."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document notes that 'Impurities can alter the external appearance (e.g., urea makes NaCl form needle-like crystals instead of cubic)', which refers to the crystal habit."
+    },
+    {
+        question: "The primary role of a crystal lattice is to define the:",
+        options: [
+            "Internal chemical reactivity.",
+            "Melting point depression.",
+            "Locations of constituent particles, dictating shape.",
+            "Electrical conductivity in all directions."
+        ],
+        correctAnswer: 2,
+        reasoning: "A 'Crystal Lattice' is defined as a 'three-dimensional array of points... that identifies the locations of individual species... forming a 3D pattern responsible for specific geometrical shapes'."
+    },
+    {
+        question: "Complete description of a unit cell requires knowledge of its:",
+        options: [
+            "Total volume and density.",
+            "Interfacial angles and density.",
+            "Edge lengths and axial angles.",
+            "Number of atoms per cell and coordination number."
+        ],
+        correctAnswer: 2,
+        reasoning: "Unit cells are characterized by 'Relative lengths of the edges along three axes (a, b, c)' and 'Three angles between the edges (α, β, γ)'."
+    },
+    {
+        question: "The unique feature of a body-centered cubic lattice is:",
+        options: [
+            "Particles exclusively at the corners.",
+            "Particles at corners and face centers.",
+            "Particles at corners and one in the cube's interior.",
+            "Particles forming a hexagonal prism."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Body-Centered Cubic Lattice' is described as having 'Particles at the corners and one particle at the center of the cube'."
+    },
+    {
+        question: "Maximum space occupation within a cubic lattice is characteristic of the:",
+        options: [
+            "Simple cubic lattice.",
+            "Body-centered cubic lattice.",
+            "Face-centered cubic lattice.",
+            "Hexagonal close-packed lattice."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Face-Centered Cubic Lattice' is noted for '(Maximum space occupied)'."
+    },
+    {
+        question: "In NaCl, Na+ ions occupy octahedral holes within the Cl- ion's:",
+        options: [
+            "Simple cubic lattice.",
+            "Body-centered cubic lattice.",
+            "Cubic closed-packed arrangement.",
+            "Diamond cubic structure."
+        ],
+        correctAnswer: 2,
+        reasoning: "The NaCl crystal section states, 'Cl- ions can be considered to form a cubic closed-packed (ccp) arrangement, with Na+ ions occupying all octahedral holes'."
+    },
+    {
+        question: "A highly stable ionic crystal is typically associated with:",
+        options: [
+            "A small (less negative) lattice energy.",
+            "A large (more negative) lattice energy.",
+            "A positive lattice energy.",
+            "Zero lattice energy."
+        ],
+        correctAnswer: 1,
+        reasoning: "The 'Significance' of lattice energy states, 'A larger (more negative) lattice energy indicates a more stable ionic lattice and stronger ionic bonding'."
+    },
+    {
+        question: "Lattice energy is predominantly determined via:",
+        options: [
+            "Direct calorimetric measurement.",
+            "Spectroscopic analysis of ion vibrations.",
+            "Computational methods like the Born-Haber cycle.",
+            "Direct measurement of enthalpy of sublimation."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Determination' of lattice energy states it 'Cannot be determined by direct experiment; calculated using energy cycles like the Born-Haber cycle'."
+    },
+    {
+        question: "A characteristic mechanical property of ionic solids is their:",
+        options: [
+            "Malleability.",
+            "Ductility.",
+            "Brittleness.",
+            "Elasticity."
+        ],
+        correctAnswer: 2,
+        reasoning: "The properties of ionic solids include being 'Brittle (shatter easily)'."
+    },
+    {
+        question: "The constituent particles of a molecular solid are primarily held by:",
+        options: [
+            "Strong ionic bonds.",
+            "Extensive covalent networks.",
+            "Weak Van der Waals forces.",
+            "Delocalized metallic bonds."
+        ],
+        correctAnswer: 2,
+        reasoning: "Molecular solids 'Consist of atoms or molecules held together by weak Van der Waals forces (or hydrogen bonding)'."
+    },
+    {
+        question: "Isomorphous substances share which specific chemical characteristic?",
+        options: [
+            "Identical elemental composition.",
+            "Similar reactivity with acids.",
+            "The same atomic ratio in their formula units.",
+            "Identical lattice energy values."
+        ],
+        correctAnswer: 2,
+        reasoning: "A characteristic of isomorphism is that 'Isomorphs typically have the same atomic ratio in their formula units'."
+    },
+    {
+        question: "Polymorphism is activated by a substance's exposure to:",
+        options: [
+            "Complete vacuum.",
+            "Different environmental conditions.",
+            "Extremely high pressures only.",
+            "Strong oxidizing agents."
+        ],
+        correctAnswer: 1,
+        reasoning: "Polymorphism is 'the occurrence of the same crystalline substance in more than one crystalline form under different conditions'."
+    },
+    {
+        question: "An element displaying both rhombic and monoclinic crystalline forms is:",
+        options: [
+            "Oxygen.",
+            "Carbon.",
+            "Sulphur.",
+            "Nitrogen."
+        ],
+        correctAnswer: 2,
+        reasoning: "Examples of allotropy list 'Sulphur: Rhombic, Monoclinic (crystalline)'."
+    },
+    {
+        question: "The temperature allowing equilibrium coexistence of multiple crystalline forms of one substance is the:",
+        options: [
+            "Melting point.",
+            "Boiling point.",
+            "Transition temperature.",
+            "Freezing point."
+        ],
+        correctAnswer: 2,
+        reasoning: "Transition temperature is defined as 'the temperature where more than one crystalline form of a given substance can coexist in equilibrium'."
+    },
+    {
+        question: "Optimal crystal formation from a liquid is best achieved through:",
+        options: [
+            "Rapid quenching.",
+            "Controlled slow cooling.",
+            "High-speed stirring.",
+            "Intense pressure application."
+        ],
+        correctAnswer: 1,
+        reasoning: "The document states that 'Crystals are usually grown by slow cooling of a substance in a liquid state'."
+    },
+    {
+        question: "The ratio of ionic radii primarily dictates a crystal's:",
+        options: [
+            "Lattice energy magnitude.",
+            "Isomorphism with other compounds.",
+            "Coordination number and overall structure.",
+            "Electrical conductivity mechanism."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Radius Ratio' is defined as 'The ratio of the cation radius to the anion radius determines the coordination number and crystal structure'."
+    },
+    {
+        question: "Ionic solids are generally highly soluble in:",
+        options: [
+            "Non-polar organic solvents.",
+            "Metallic solvents.",
+            "Polar solvents.",
+            "Supercritical fluids."
+        ],
+        correctAnswer: 2,
+        reasoning: "Properties of ionic solids state they are 'Soluble in polar solvents (e.g., water)'."
+    },
+    {
+        question: "Solubility of molecular solids typically follows the principle of:",
+        options: [
+            "\"Like dissolves unlike.\"",
+            "\"Non-polar dissolves polar.\"",
+            "\"Polar dissolves polar.\"",
+            "\"Always soluble in water.\""
+        ],
+        correctAnswer: 2,
+        reasoning: "Molecular solids' solubility is described as 'Polar molecular solids are soluble in polar solvents; non-polar molecular solids are soluble in non-polar solvents', which is the 'like dissolves like' principle."
+    },
+    {
+        question: "A crystal expanding along one axis while contracting along another exemplifies:",
+        options: [
+            "Isotropic behavior.",
+            "Thermal isotropy.",
+            "Anisotropic thermal expansion.",
+            "Amorphous structure."
+        ],
+        correctAnswer: 2,
+        reasoning: "Anisotropy is defined as 'showing different intensities (magnitudes) of physical properties (e.g., thermal expansion)... in different directions'. The example of silver iodide directly illustrates this."
+    },
+    {
+        question: "Graphite's electrical conductivity is significantly higher:",
+        options: [
+            "Perpendicular to its layers.",
+            "Isotropically throughout its structure.",
+            "Parallel to its layers.",
+            "When its layers are fully separated."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states 'graphite's electrical conductivity is much greater parallel to its layers than perpendicular', as an example of anisotropy."
+    },
+    {
+        question: "A pure crystalline solid will melt differently from an amorphous solid by exhibiting a:",
+        options: [
+            "Gradual softening over a temperature range.",
+            "Sharp, distinct melting point.",
+            "Higher latent heat of fusion.",
+            "Lower boiling point."
+        ],
+        correctAnswer: 1,
+        reasoning: "Pure crystalline solids have 'sharp and definite melting points' with a constant temperature during the process, contrasting with amorphous solids which soften gradually (implied by the distinctiveness of crystalline melting)."
+    },
+    {
+        question: "Ionic solids possess significant hardness primarily due to:",
+        options: [
+            "Their low densities.",
+            "Weak intermolecular forces.",
+            "Strong electrostatic attractions between ions.",
+            "Their ability to conduct electricity."
+        ],
+        correctAnswer: 2,
+        reasoning: "Ionic solids are characterized as 'Hard' due to the 'strong ionic bonds (electrostatic attractions)' that form their lattice."
+    },
+    {
+        question: "Molecular solids typically melt at temperatures:",
+        options: [
+            "Exceeding 1000°C.",
+            "Generally below 200°C.",
+            "Only at extremely high pressures.",
+            "With no distinct melting point."
+        ],
+        correctAnswer: 1,
+        reasoning: "Molecular solids are described as having 'Low melting points (mostly below 200°C)'."
+    },
+    {
+        question: "Away from its transition temperature, a polymorphic substance will:",
+        options: [
+            "Stabilize as a mixture of all forms.",
+            "Decompose into simpler compounds.",
+            "Exist as only one stable crystalline form.",
+            "Exhibit amorphous behavior."
+        ],
+        correctAnswer: 2,
+        reasoning: "The definition of transition temperature states that 'Above or below this temperature, only one polymorph or allotrope can exist'."
+    },
+    {
+        question: "For achieving highly ordered crystal structures, cooling should be:",
+        options: [
+            "Rapid, to prevent disorder.",
+            "Slow, enabling proper ion positioning.",
+            "Fluctuating, to induce defects.",
+            "Performed under constant high temperature."
+        ],
+        correctAnswer: 1,
+        reasoning: "The 'Effect of Temperature' on crystal formation highlights that 'Slow cooling allows ions to find proper positions, essential for perfect crystal formation'."
+    },
+    {
+        question: "Repetitive crystal appearance upon rotation around an imaginary line defines a(n):",
+        options: [
+            "Plane of symmetry.",
+            "Center of symmetry.",
+            "Axis of symmetry.",
+            "Interfacial angle."
+        ],
+        correctAnswer: 2,
+        reasoning: "An 'Axis of Symmetry' is defined as 'An imaginary line through the crystal such that rotation... causes the crystal to present the same appearance more than once'."
+    },
+    {
+        question: "A crystalline solid retains its geometric shape even as a fine powder due to its:",
+        options: [
+            "Amorphous nature.",
+            "Weak intermolecular forces.",
+            "Consistent internal atomic arrangement.",
+            "High surface area."
+        ],
+        correctAnswer: 2,
+        reasoning: "Crystalline solids 'retain their specific geometrical shapes even when ground into a fine powder' because they 'break or split into smaller crystals of the same shape as the original' along cleavage planes, implying a consistent underlying internal structure."
+    },
+    {
+        question: "Rapid cooling of a liquid during solidification will likely impede the formation of:",
+        options: [
+            "A liquid-solid equilibrium.",
+            "A highly ordered crystalline structure.",
+            "A molten metallic state.",
+            "An amorphous solid with long-range order."
+        ],
+        correctAnswer: 1,
+        reasoning: "Crystalline solids are 'Typically produced by slow cooling of a liquid'. Therefore, rapid cooling would hinder the formation of a highly ordered crystalline structure."
+    },
+    {
+        question: "Ionic solids consist of a lattice composed of:",
+        options: [
+            "Neutral atoms held by covalent bonds.",
+            "Molecules held by weak Van der Waals forces.",
+            "Positive and negative ions held by electrostatic forces.",
+            "Delocalized electrons within a metallic matrix."
+        ],
+        correctAnswer: 2,
+        reasoning: "Ionic solids' 'Composition: Lattice made of positive and negative ions held by strong ionic bonds (electrostatic attractions)'."
+    },
+    {
+        question: "London forces are the dominant intermolecular forces in substances like:",
+        options: [
+            "Polar covalent compounds.",
+            "Ionic solids.",
+            "Noble gases.",
+            "Molten metals."
+        ],
+        correctAnswer: 2,
+        reasoning: "London forces are 'forces present in noble gases (helium, neon, argon)'."
+    },
+    {
+        question: "The intrinsic identity of a crystalline substance is best preserved by its consistent:",
+        options: [
+            "Total mass.",
+            "External dimensions.",
+            "Interfacial angles.",
+            "Density variations."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states, 'Regardless of external appearance or size, the interfacial angles between faces are always the same for a given substance', making them a consistent identifying characteristic."
+    },
+    {
+        question: "The relative sizes of cation and anion primarily govern an ionic crystal's:",
+        options: [
+            "Chemical reactivity.",
+            "Melting point.",
+            "Coordination number.",
+            "Optical transparency."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Radius Ratio' is defined as 'The ratio of the cation radius to the anion radius determines the coordination number and crystal structure'."
+    },
+    {
+        question: "The reduced density of ice, crucial for aquatic life, directly facilitates:",
+        options: [
+            "Enhanced oxygen dissolution at the surface.",
+            "Formation of an insulating layer on water bodies.",
+            "Increased water circulation beneath ice.",
+            "Greater light penetration through ice."
+        ],
+        correctAnswer: 1,
+        reasoning: "Ice floating means it forms on the surface, creating an insulating layer that protects the underlying water and aquatic life from freezing solid, as implied by 'This is a crucial property for aquatic life'."
+    },
+    {
+        question: "Liquids typically exhibit density and compressibility that are:",
+        options: [
+            "Identical to gases.",
+            "Significantly lower than solids.",
+            "Comparable to solids.",
+            "Highly variable, depending only on temperature."
+        ],
+        correctAnswer: 2,
+        reasoning: "The introduction states, 'Like solids, liquids share similarities in density and compressibility'."
+    },
+    {
+        question: "The boiling point serves as a key characteristic property because it is:",
+        options: [
+            "Dependent on the sample size.",
+            "A unique, intrinsic value for a pure substance under standard conditions.",
+            "Easily altered by surface area changes.",
+            "Directly proportional to kinetic energy for all substances."
+        ],
+        correctAnswer: 1,
+        reasoning: "The document states boiling point 'is a commonly used physical property for characterizing substances', implying it is a reliable and distinguishing feature for identification under specified conditions."
+    },
+    {
+        question: "Forces requiring hundreds of kJ/mol to break are typically:",
+        options: [
+            "London dispersion forces.",
+            "Dipole-dipole interactions.",
+            "Intramolecular covalent bonds.",
+            "Hydrogen bonds."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Strength Comparison' section lists 'Intra-molecular forces (e.g., O-H covalent bond in water: 930 kJ/mol)' as significantly stronger than intermolecular forces (e.g., hydrogen bonding: 40.7 kJ/mol)."
+    },
+    {
+        question: "Water's remarkably high boiling point is largely attributed to:",
+        options: [
+            "Its high molecular mass.",
+            "Strong intramolecular O-H bonds.",
+            "Extensive hydrogen bonding.",
+            "Weak London dispersion forces."
+        ],
+        correctAnswer: 2,
+        reasoning: "Water forms hydrogen bonds, which are the strongest type of intermolecular force. Liquids with stronger intermolecular forces have higher boiling points."
+    },
+    {
+        question: "Liquid water achieves its maximum density at which temperature?",
+        options: [
+            "0°C",
+            "4°C",
+            "100°C",
+            "-4°C"
+        ],
+        correctAnswer: 1,
+        reasoning: "The 'Anomalous Behaviour of Water' section explicitly states, 'Water has a maximum density of 1.000 g/cm³ at 4°C'."
+    },
+    {
+        question: "The primary cohesive force in molten metals is characterized as:",
+        options: [
+            "Ionic.",
+            "Covalent.",
+            "Metallic.",
+            "Hydrogen bonding."
+        ],
+        correctAnswer: 2,
+        reasoning: "The introduction states 'Cohesive forces in liquids can be... metallic (molten metals)'."
+    },
+    {
+        question: "Liquids are considered intermediate between gases and solids regarding:",
+        options: [
+            "Their complete disorder and negligible IMFs.",
+            "Their complete regularity and fixed particle positions.",
+            "Their degree of molecular order and intermolecular forces.",
+            "Their inability to deform and high compressibility."
+        ],
+        correctAnswer: 2,
+        reasoning: "The introduction states 'Liquids exhibit properties intermediate between gases (complete disorder) and solids (complete regularity)'."
+    },
+    {
+        question: "What happens to the kinetic energy of liquid molecules as temperature increases?",
+        options: [
+            "It remains constant.",
+            "It decreases exponentially.",
+            "It increases, leading to increased motion.",
+            "It becomes equal to that of solids."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Motion of molecules' section states 'kinetic energy increases with temperature, leading to increased motion'."
+    },
+    {
+        question: "The stability of an ionic crystal increases with:",
+        options: [
+            "Decreasing ionic charges and increasing ion sizes.",
+            "Increasing ionic charges and increasing ion sizes.",
+            "Decreasing ionic charges and decreasing ion sizes.",
+            "Increasing ionic charges and decreasing ion sizes."
+        ],
+        correctAnswer: 3,
+        reasoning: "Lattice energy increases with increasing charge and decreasing size, and a larger lattice energy indicates a more stable ionic lattice."
+    },
+    {
+        question: "What type of intermolecular forces are London dispersion forces?",
+        options: [
+            "Strongest type, involving hydrogen.",
+            "Dipole-dipole interactions in polar molecules.",
+            "Weakest type, present in all substances.",
+            "Ionic attractions between charged particles."
+        ],
+        correctAnswer: 2,
+        reasoning: "London dispersion forces are mentioned as a type of IMF, generally considered weak, and universally present, although not explicitly stated as 'weakest' or 'present in all substances' in this text, it is inferable from 'forces present in noble gases'."
+    },
+    {
+        question: "The spontaneous conversion of liquid to vapor at any temperature is known as:",
+        options: [
+            "Boiling.",
+            "Condensation.",
+            "Evaporation.",
+            "Sublimation."
+        ],
+        correctAnswer: 2,
+        reasoning: "Evaporation is defined as 'The spontaneous change of a liquid into its vapours at any temperature'."
+    },
+    {
+        question: "What is the consequence if the rate of condensation exceeds the rate of evaporation in a closed container?",
+        options: [
+            "The liquid will boil.",
+            "The vapor pressure will increase indefinitely.",
+            "The amount of liquid will increase, and vapor pressure will decrease.",
+            "Dynamic equilibrium is immediately established."
+        ],
+        correctAnswer: 2,
+        reasoning: "The mechanism of vapour pressure describes that initially evaporation > condensation, but as vapour concentration increases, condensation rate rises until it equals evaporation. If condensation were to exceed, the reverse would happen, increasing liquid amount and reducing vapor pressure until equilibrium is reached."
+    },
+    {
+        question: "Which of the following would raise the boiling point of water above 100°C?",
+        options: [
+            "Decreasing the external pressure.",
+            "Increasing the surface area.",
+            "Increasing the external pressure.",
+            "Adding a non-volatile solute."
+        ],
+        correctAnswer: 2,
+        reasoning: "The document states that a 'Pressure Cooker: Increases external pressure, raising the boiling point of water above 100°C'."
+    },
+    {
+        question: "The formation of empty spaces in ice compared to liquid water leads to:",
+        options: [
+            "A decrease in volume and an increase in density.",
+            "An increase in volume and an increase in density.",
+            "A decrease in volume and a decrease in density.",
+            "An increase in volume and a decrease in density."
+        ],
+        correctAnswer: 3,
+        reasoning: "The structure of ice section explains that 'creating empty spaces. This leads to an increase in volume and a decrease in density' of ice."
+    },
+    {
+        question: "What type of forces are covalent bonds?",
+        options: [
+            "Intermolecular forces.",
+            "Van der Waals' forces.",
+            "Intra-molecular forces.",
+            "Hydrogen bonds."
+        ],
+        correctAnswer: 2,
+        reasoning: "Intra-molecular forces are defined as 'Attractive forces *within* a molecule (e.g., covalent bonds)'."
+    },
+    {
+        question: "When a crystalline solid is heated to its melting point, its particles:",
+        options: [
+            "Begin rapid decomposition.",
+            "Simultaneously leave fixed positions.",
+            "Undergo significant chemical change.",
+            "Become completely disordered instantly."
+        ],
+        correctAnswer: 1,
+        reasoning: "At the melting point, particles 'simultaneously leave fixed positions and become liquid'."
+    },
+    {
+        question: "Crystal lattice points identify the locations of:",
+        options: [
+            "Vapor molecules.",
+            "Liquid molecules.",
+            "Individual species (atoms, ions, or molecules).",
+            "Cleavage planes only."
+        ],
+        correctAnswer: 2,
+        reasoning: "A 'Crystal Lattice' is defined as 'A regular three-dimensional array of points... that identifies the locations of individual species (atoms, ions, or molecules)'."
+    },
+    {
+        question: "The external shape or appearance of a crystal in its natural state is its:",
+        options: [
+            "Unit cell.",
+            "Lattice energy.",
+            "Crystal habit.",
+            "Cleavage plane."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Habit of Crystal' is defined as 'The external shape or appearance of a crystal in its natural state'."
+    },
+    {
+        question: "What differentiates polymorphism from allotropy?",
+        options: [
+            "Polymorphism refers to elements, allotropy to compounds.",
+            "Polymorphism requires identical physical properties, allotropy does not.",
+            "Polymorphism applies to any substance, allotropy specifically to elements.",
+            "Polymorphism involves different chemical properties, allotropy identical ones."
+        ],
+        correctAnswer: 2,
+        reasoning: "Allotropy is defined as 'A specific case of polymorphism for elements', while polymorphism applies to 'the same crystalline substance' (which can be an element or a compound)."
+    },
+    {
+        question: "If a substance undergoes a change in crystalline form at 128.5 °C, this temperature is its:",
+        options: [
+            "Melting point.",
+            "Boiling point.",
+            "Transition temperature.",
+            "Critical temperature."
+        ],
+        correctAnswer: 2,
+        reasoning: "Transition temperature is defined as 'The specific temperature at which one crystalline form of a substance changes into another crystalline form'. KNO3 (128.5 °C) is given as an example."
+    },
+    {
+        question: "The ability of liquids to form homogeneous mixtures is due to:",
+        options: [
+            "Their high density.",
+            "Lack of kinetic energy.",
+            "Constant random molecular motion.",
+            "Their fixed molecular positions."
+        ],
+        correctAnswer: 2,
+        reasoning: "Diffusion in liquids states, 'Liquids diffuse and form homogeneous mixtures due to constant random molecular motion and kinetic energy'."
+    },
+    {
+        question: "Which type of intermolecular force is responsible for the double-helix structure of DNA?",
+        options: [
+            "Ionic bonding.",
+            "Metallic bonding.",
+            "Hydrogen bonding.",
+            "Dipole-dipole interactions (general)."
+        ],
+        correctAnswer: 2,
+        reasoning: "Hydrogen bonding 'Stabilizes the structures of large biological molecules like proteins (spiral helix) and DNA (double-helix ladder)'."
+    },
+    {
+        question: "The expansion of liquids when heated, observed without accounting for the container, is known as:",
+        options: [
+            "True expansion.",
+            "Absolute expansion.",
+            "Relative expansion.",
+            "Apparent expansion."
+        ],
+        correctAnswer: 3,
+        reasoning: "Apparent expansion is defined as 'Observed expansion when heated in a container (without accounting for container expansion)'."
+    },
+    {
+        question: "What does it mean for a liquid's vapour pressure to be in dynamic equilibrium?",
+        options: [
+            "All liquid has evaporated.",
+            "No more molecules are moving.",
+            "Evaporation and condensation rates are equal.",
+            "The temperature is rapidly changing."
+        ],
+        correctAnswer: 2,
+        reasoning: "Vapour pressure is defined at 'dynamic equilibrium', meaning 'the rate of evaporation equals the rate of condensation'."
+    },
+    {
+        question: "Why is the O-H covalent bond in water much stronger than the hydrogen bond in water?",
+        options: [
+            "Covalent bonds are intermolecular, hydrogen bonds are intramolecular.",
+            "Covalent bonds involve electron sharing, hydrogen bonds are electrostatic attractions.",
+            "Hydrogen bonds are stronger at higher temperatures.",
+            "The energy difference is negligible at room temperature."
+        ],
+        correctAnswer: 1,
+        reasoning: "Intra-molecular forces (covalent bonds) are 'significantly stronger' than intermolecular forces (hydrogen bonding). The covalent O-H bond involves sharing electrons within a molecule, while H-bonds are attractions between molecules."
+    },
+    {
+        question: "A substance with a coordination number of 6 for each ion and a 1:1 ionic ratio is characteristic of a:",
+        options: [
+            "Simple cubic lattice.",
+            "Body-centered cubic lattice.",
+            "Face-centered cubic (e.g., NaCl) arrangement.",
+            "Hexagonal close-packed lattice."
+        ],
+        correctAnswer: 2,
+        reasoning: "The NaCl crystal is given as 'a typical example of a face-centered cubic (fcc) arrangement... Coordination Number: Each Na+ ion is surrounded by 6 Cl- ions, and each Cl- ion is surrounded by 6 Na+ ions, so the coordination number for each ion is 6'."
+    },
+    {
+        question: "What term describes the property of a substance showing different physical properties in different directions?",
+        options: [
+            "Isotropy.",
+            "Homogeneity.",
+            "Anisotropy.",
+            "Polymorphism."
+        ],
+        correctAnswer: 2,
+        reasoning: "Anisotropy is defined as 'The property of a substance showing different intensities (magnitudes) of physical properties... in different directions'."
+    },
+    {
+        question: "Crystal growth by slow cooling is crucial because it allows ions to:",
+        options: [
+            "Decompose into constituent elements.",
+            "Form an amorphous solid structure.",
+            "Find proper positions for perfect crystal formation.",
+            "Exhibit increased kinetic energy for faster growth."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Effect of Temperature' states that 'Slow cooling allows ions to find proper positions, essential for perfect crystal formation'."
+    },
+    {
+        question: "What primarily influences the shape of an ionic crystal?",
+        options: [
+            "The kinetic energy of its constituent ions.",
+            "The type of intermolecular forces present.",
+            "The electrostatic force of attraction and radius ratio.",
+            "The rate of evaporation of the molten salt."
+        ],
+        correctAnswer: 2,
+        reasoning: "Factors affecting the shape of an ionic crystal include 'Electrostatic Force of Attraction' and 'Radius Ratio'."
+    },
+    {
+        question: "A substance existing as different physical forms (e.g., Rhombic and Monoclinic for Sulphur) is an example of:",
+        options: [
+            "Isomorphism.",
+            "Polymorphism (for an element).",
+            "Allotropy.",
+            "Both Polymorphism and Allotropy."
+        ],
+        correctAnswer: 3,
+        reasoning: "Allotropy is defined as 'The occurrence of an element in different physical forms', and 'Allotropy is a specific case of polymorphism for elements'. Therefore, both terms apply, but Allotropy is the more specific and appropriate term for an element."
+    },
+    {
+        question: "If external pressure on a liquid is increased, what happens to its boiling point?",
+        options: [
+            "It decreases.",
+            "It remains constant.",
+            "It increases.",
+            "It becomes equal to its melting point."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Dependence' of boiling point states, 'Boiling point depends on external pressure'. The pressure cooker example shows 'Increases external pressure, raising the boiling point'."
+    },
+    {
+        question: "What is the consequence of forming permanent hydrogen bonds and empty spaces in ice below 4°C?",
+        options: [
+            "Decrease in volume and increase in density.",
+            "Increase in volume and decrease in density.",
+            "No change in volume, but increase in density.",
+            "Increased fluidity and decreased viscosity."
+        ],
+        correctAnswer: 1,
+        reasoning: "Below 4°C, water molecules form a more regular arrangement with permanent H-bonds, creating empty spaces. This leads to an 'increase in volume and a decrease in density' of ice."
+    },
+    {
+        question: "Molecular solids are generally soft and have low melting points because:",
+        options: [
+            "They have strong ionic bonds.",
+            "They form extensive covalent networks.",
+            "Their constituent particles are held by weak intermolecular forces.",
+            "They have high lattice energies."
+        ],
+        correctAnswer: 2,
+        reasoning: "Properties of molecular solids include 'Weak attractive forces' and 'Soft. Low melting points', directly linked to the weak Van der Waals forces holding them together."
+    },
+    {
+        question: "A plane that divides a crystal into two exact mirror images is a:",
+        options: [
+            "Axis of symmetry.",
+            "Center of symmetry.",
+            "Cleavage plane.",
+            "Plane of symmetry."
+        ],
+        correctAnswer: 3,
+        reasoning: "A 'Plane of Symmetry' is defined as 'An imaginary plane that divides a crystal into two exact mirror images'."
+    },
+    {
+        question: "The type of symmetry element that involves rotation around an imaginary line is called:",
+        options: [
+            "Plane of symmetry.",
+            "Axis of symmetry.",
+            "Center of symmetry.",
+            "Point of inversion."
+        ],
+        correctAnswer: 1,
+        reasoning: "An 'Axis of Symmetry' is defined as 'An imaginary line through the crystal such that rotation... causes the crystal to present the same appearance more than once'."
+    },
+    {
+        question: "If a crystal has multiple planes of symmetry, how many centers of symmetry can it have?",
+        options: [
+            "Zero.",
+            "One.",
+            "Multiple.",
+            "Depends on the crystal system."
+        ],
+        correctAnswer: 1,
+        reasoning: "The document states, 'A crystal can have multiple planes or axes of symmetry but only one center of symmetry'."
+    },
+    {
+        question: "What characteristic property of crystalline solids distinguishes them from amorphous solids during melting?",
+        options: [
+            "They soften gradually over a temperature range.",
+            "They decompose before melting.",
+            "They have sharp and definite melting points.",
+            "Their temperature decreases during melting."
+        ],
+        correctAnswer: 2,
+        reasoning: "Pure crystalline solids have 'sharp and definite melting points' where 'The temperature remains constant during the melting process'."
+    },
+    {
+        question: "When crystals break under external pressure, they split along specific directions called:",
+        options: [
+            "Grain boundaries.",
+            "Fracture lines.",
+            "Cleavage planes.",
+            "Interfacial angles."
+        ],
+        correctAnswer: 2,
+        reasoning: "Cleavage Plane: 'When crystals break, they split along straight, weak faces (due to atomic structure) called cleavage planes'."
+    },
+    {
+        question: "How does the presence of impurities affect the external appearance of a crystal?",
+        options: [
+            "It always makes crystals grow larger.",
+            "It can alter the external habit of the crystal.",
+            "It has no effect on external appearance.",
+            "It increases the melting point significantly."
+        ],
+        correctAnswer: 1,
+        reasoning: "Impurities can 'alter the external appearance (e.g., urea makes NaCl form needle-like crystals instead of cubic)'."
+    },
+    {
+        question: "What is the defining feature of a unit cell?",
+        options: [
+            "It is the entire crystal.",
+            "It is an amorphous region.",
+            "It is the smallest repeating structural unit of a crystalline solid.",
+            "It contains only one atom or ion."
+        ],
+        correctAnswer: 2,
+        reasoning: "A 'Unit Cell' is defined as 'The smallest box-like unit, or the basic repeating structural unit of a crystalline solid'."
+    },
+    {
+        question: "Which type of cubic unit cell has particles at the corners and one particle at the center of the cube?",
+        options: [
+            "Simple cubic lattice.",
+            "Body-centered cubic lattice.",
+            "Face-centered cubic lattice.",
+            "Hexagonal unit cell."
+        ],
+        correctAnswer: 1,
+        reasoning: "The 'Body-Centered Cubic Lattice' has 'Particles at the corners and one particle at the center of the cube'."
+    },
+    {
+        question: "In a face-centered cubic lattice, where are the particles located?",
+        options: [
+            "Only at the corners.",
+            "At corners and in the body center.",
+            "At corners and in the center of each face.",
+            "Only in the body center."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Face-Centered Cubic Lattice' has 'Particles at the corners and one particle at the center of each of the six faces'."
+    },
+    {
+        question: "What is the relationship between lattice energy and ionic bonding strength?",
+        options: [
+            "Inverse relationship.",
+            "No relationship.",
+            "Direct relationship: higher lattice energy means stronger bonding.",
+            "Lattice energy only affects physical properties, not bonding strength."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Significance' section states, 'A larger (more negative) lattice energy indicates a more stable ionic lattice and stronger ionic bonding'."
+    },
+    {
+        question: "Ionic solids are hard and brittle because of:",
+        options: [
+            "Weak intermolecular forces.",
+            "Strong electrostatic attractions between fixed ions.",
+            "The presence of delocalized electrons.",
+            "Their amorphous structure."
+        ],
+        correctAnswer: 1,
+        reasoning: "Ionic solids are 'Hard. Brittle (shatter easily)' due to their lattice being 'held by strong ionic bonds (electrostatic attractions)'."
+    },
+    {
+        question: "Polymorphs of a substance have:",
+        options: [
+            "Different chemical properties and different physical properties.",
+            "Same chemical properties but different physical properties.",
+            "Different atomic ratios.",
+            "Different crystalline shapes but identical chemical structures."
+        ],
+        correctAnswer: 1,
+        reasoning: "Polymorphs have 'the same chemical properties but different physical properties due to varying particle arrangements'."
+    },
+    {
+        question: "What is the specific temperature at which one crystalline form changes into another?",
+        options: [
+            "Melting point.",
+            "Boiling point.",
+            "Transition temperature.",
+            "Sublimation point."
+        ],
+        correctAnswer: 2,
+        reasoning: "Transition temperature is defined as 'The specific temperature at which one crystalline form of a substance changes into another crystalline form'."
+    },
+    {
+        question: "Compared to liquids, solids exhibit:",
+        options: [
+            "Greater kinetic energy.",
+            "Stronger intermolecular forces.",
+            "More free molecular movement.",
+            "Less definite volume."
+        ],
+        correctAnswer: 1,
+        reasoning: "KMT states 'Intermolecular forces (IMFs) in liquids are stronger than in gases but weaker than in solids'. This implies solids have stronger IMFs than liquids."
+    },
+    {
+        question: "Why does a liquid's kinetic energy increase with temperature?",
+        options: [
+            "Molecules break apart into atoms.",
+            "Intermolecular forces become stronger.",
+            "Molecules absorb thermal energy and move faster.",
+            "The liquid becomes less dense."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Motion of molecules' section states 'their kinetic energy increases with temperature, leading to increased motion'."
+    },
+    {
+        question: "The property that allows a liquid to offer no resistance to deformation is:",
+        options: [
+            "Its density.",
+            "Its compressibility.",
+            "Its fluidity.",
+            "Its definite volume."
+        ],
+        correctAnswer: 2,
+        reasoning: "The introduction states 'Like gases, liquids are fluids and offer no resistance to deformation, adopting the shape of their container'."
+    },
+    {
+        question: "What condition is necessary for a liquid to establish dynamic equilibrium with its vapor in a closed container?",
+        options: [
+            "The temperature must be at the boiling point.",
+            "The container must be open to the atmosphere.",
+            "The rates of evaporation and condensation must be equal.",
+            "All liquid molecules must have escaped to the vapor phase."
+        ],
+        correctAnswer: 2,
+        reasoning: "Vapour pressure is defined as when 'the rate of evaporation equals the rate of condensation in a closed container (dynamic equilibrium)'."
+    },
+    {
+        question: "The ability of water to dissolve many organic substances that form hydrogen bonds (e.g., ethyl alcohol) is due to:",
+        options: [
+            "Water's non-polar nature.",
+            "Water's high density.",
+            "Water's ability to form hydrogen bonds.",
+            "Water's low boiling point."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Solubility' section states, 'Organic substances that can form hydrogen bonds with water (e.g., ethyl alcohol) are soluble in water'."
+    },
+    {
+        question: "In the context of the anomalous behavior of water, what happens to water's volume when cooled from 4°C to 0°C?",
+        options: [
+            "It continues to contract.",
+            "It expands.",
+            "It remains constant.",
+            "It becomes a gas."
+        ],
+        correctAnswer: 1,
+        reasoning: "The 'Anomalous Behaviour of Water' states, 'It contracts in volume when cooled to 4°C, but then expands when cooled from 4°C to 0°C'."
+    },
+    {
+        question: "What type of intermolecular force is responsible for the 'sticking action of glue'?",
+        options: [
+            "Covalent bonds.",
+            "Ionic bonds.",
+            "Metallic bonds.",
+            "Hydrogen bonding."
+        ],
+        correctAnswer: 3,
+        reasoning: "The 'Other Roles' of hydrogen bonding include 'sticking action of glue/honey'."
+    },
+    {
+        question: "The arrangement of faces and interfacial angles is consistent for a given crystalline solid, regardless of:",
+        options: [
+            "Its chemical composition.",
+            "The method of preparation.",
+            "Its melting point.",
+            "Its overall density."
+        ],
+        correctAnswer: 1,
+        reasoning: "Under 'Geometrical Shape', it states, 'The arrangement of faces and interfacial angles is consistent for a given crystal, regardless of preparation method'."
+    },
+    {
+        question: "A regular three-dimensional array of points identifying particle locations in a crystal is called a:",
+        options: [
+            "Unit cell.",
+            "Crystal habit.",
+            "Crystal lattice.",
+            "Cleavage plane."
+        ],
+        correctAnswer: 2,
+        reasoning: "A 'Crystal Lattice' is defined as 'A regular three-dimensional array of points (called lattice points or lattice sites) that identifies the locations of individual species'."
+    },
+    {
+        question: "What are the parameters used to characterize a unit cell?",
+        options: [
+            "Mass and volume.",
+            "Density and hardness.",
+            "Edge lengths and angles between edges.",
+            "Number of particles and melting point."
+        ],
+        correctAnswer: 2,
+        reasoning: "Unit cells are characterized by 'Relative lengths of the edges along three axes (a, b, c). Three angles between the edges (α, β, γ)'."
+    },
+    {
+        question: "Which type of cubic unit cell typically contains only particles at the corners and has maximum vacant space?",
+        options: [
+            "Simple cubic lattice.",
+            "Body-centered cubic lattice.",
+            "Face-centered cubic lattice.",
+            "Cubic P-type."
+        ],
+        correctAnswer: 0,
+        reasoning: "The 'Simple Cubic Lattice (Cubic P-type)' has 'Particles only at the corners... (Maximum vacant space)'."
+    },
+    {
+        question: "Lattice energy determination often relies on indirect methods like the Born-Haber cycle because:",
+        options: [
+            "It is an endothermic process.",
+            "It cannot be determined by direct experiment.",
+            "It is always zero for stable ionic crystals.",
+            "It depends on the crystal's external shape."
+        ],
+        correctAnswer: 1,
+        reasoning: "The 'Determination' of lattice energy states, 'Cannot be determined by direct experiment; calculated using energy cycles like the Born-Haber cycle'."
+    },
+    {
+        question: "Why do ionic solids not conduct electricity in the solid state?",
+        options: [
+            "They are non-polar.",
+            "Their ions are fixed in the lattice.",
+            "They have delocalized electrons.",
+            "They are always amorphous."
+        ],
+        correctAnswer: 1,
+        reasoning: "Ionic solids 'Do not conduct heat/electricity as solids (ions are fixed)'."
+    },
+    {
+        question: "What type of solid consists of atoms or molecules held by weak Van der Waals forces?",
+        options: [
+            "Ionic solid.",
+            "Metallic solid.",
+            "Molecular solid.",
+            "Covalent network solid."
+        ],
+        correctAnswer: 2,
+        reasoning: "Molecular solids 'Consist of atoms or molecules held together by weak Van der Waals forces (or hydrogen bonding)'."
+    },
+    {
+        question: "Isomorphous substances, despite having the same crystal shape and atomic ratio, differ in their:",
+        options: [
+            "Atomic ratio.",
+            "External appearance.",
+            "Physical and chemical properties.",
+            "Coordination number."
+        ],
+        correctAnswer: 2,
+        reasoning: "Isomorphism: 'Despite similar shapes, their physical and chemical properties are different as they are different compounds'."
+    },
+    {
+        question: "Allotropy is defined specifically for:",
+        options: [
+            "Compounds.",
+            "Elements.",
+            "Mixtures.",
+            "Liquids."
+        ],
+        correctAnswer: 1,
+        reasoning: "Allotropy is defined as 'The occurrence of an element in different physical forms'."
+    },
+    {
+        question: "At temperatures above its transition temperature, a polymorphic substance will:",
+        options: [
+            "Exist as a mixture of forms.",
+            "Exist as only one stable polymorph.",
+            "Undergo decomposition.",
+            "Become amorphous."
+        ],
+        correctAnswer: 1,
+        reasoning: "The definition of transition temperature states that 'Above or below this temperature, only one polymorph or allotrope can exist'."
+    },
+    {
+        question: "The kinetic energy of liquid molecules is intermediate between:",
+        options: [
+            "Gases and plasma.",
+            "Solids and gases.",
+            "Liquids and solids.",
+            "Metals and non-metals."
+        ],
+        correctAnswer: 1,
+        reasoning: "KMT states 'Liquid molecules have kinetic energy greater than solids but less than gases at a given temperature'."
+    },
+    {
+        question: "What is the key difference in intermolecular forces between liquids and gases?",
+        options: [
+            "Liquids have no IMFs, gases have strong IMFs.",
+            "Liquids have weaker IMFs than gases.",
+            "Liquids have stronger IMFs than gases.",
+            "IMFs are identical in both states."
+        ],
+        correctAnswer: 2,
+        reasoning: "KMT states 'Intermolecular forces (IMFs) in liquids are stronger than in gases but weaker than in solids'."
+    },
+    {
+        question: "The property of liquids that allows them to adopt the shape of their container is:",
+        options: [
+            "Compressibility.",
+            "Density.",
+            "Fluidity.",
+            "Fixed volume."
+        ],
+        correctAnswer: 2,
+        reasoning: "The introduction states 'Like gases, liquids are fluids and offer no resistance to deformation, adopting the shape of their container'."
+    },
+    {
+        question: "A liquid's ability to diffuse and form homogeneous mixtures is due to its:",
+        options: [
+            "Static molecular arrangement.",
+            "Constant random molecular motion.",
+            "Strong intermolecular forces only.",
+            "Low kinetic energy."
+        ],
+        correctAnswer: 1,
+        reasoning: "Diffusion: 'Liquids diffuse and form homogeneous mixtures due to constant random molecular motion and kinetic energy'."
+    },
+    {
+        question: "What characteristic of a liquid's kinetic energy distribution allows evaporation to occur below the boiling point?",
+        options: [
+            "All molecules have uniform high kinetic energy.",
+            "Energy is not equally distributed among molecules.",
+            "Molecules have minimum kinetic energy.",
+            "Molecules are static at the surface."
+        ],
+        correctAnswer: 1,
+        reasoning: "Mechanism of evaporation: 'energy is not equally distributed. Molecules with higher kinetic energy overcome IMFs and escape'."
+    },
+    {
+        question: "Increasing the surface area of a liquid will:",
+        options: [
+            "Decrease its rate of evaporation.",
+            "Increase its boiling point.",
+            "Increase its rate of evaporation.",
+            "Decrease its vapor pressure."
+        ],
+        correctAnswer: 2,
+        reasoning: "Rate of Evaporation depends on: 'Surface area: Larger surface area, faster evaporation'."
+    },
+    {
+        question: "If the boiling point of water on Mount Everest is 72°C, this means:",
+        options: [
+            "Atmospheric pressure is higher than at sea level.",
+            "The water molecules have greater kinetic energy at 72°C.",
+            "Water's vapor pressure equals the lower atmospheric pressure at 72°C.",
+            "Cooking food will be faster."
+        ],
+        correctAnswer: 2,
+        reasoning: "At higher altitudes, atmospheric pressure is lower, so water boils at lower temperatures... 'The temperature at which the internal (vapour) pressure of a liquid becomes equal to the external pressure'."
+    },
+    {
+        question: "Hydrogen bonding requires hydrogen to be bonded to a highly electronegative atom such as:",
+        options: [
+            "Carbon, Sulfur, or Chlorine.",
+            "Fluorine, Oxygen, or Nitrogen.",
+            "Phosphorus, Silicon, or Boron.",
+            "Bromine, Iodine, or Selenium."
+        ],
+        correctAnswer: 1,
+        reasoning: "Hydrogen bonding 'occurs when hydrogen is bonded to a highly electronegative atom (fluorine, oxygen, or nitrogen)'."
+    },
+    {
+        question: "The ability of ice to float on water is crucial for aquatic life because it:",
+        options: [
+            "Allows more light to penetrate the water.",
+            "Increases the oxygen solubility in water.",
+            "Insulates the water below, preventing freezing solid.",
+            "Accelerates the melting process."
+        ],
+        correctAnswer: 2,
+        reasoning: "Ice's lower density 'causing ice to float. This is a crucial property for aquatic life'. Floating ice forms an insulating layer, preventing the entire body of water from freezing."
+    },
+    {
+        question: "What type of intermolecular forces are London forces?",
+        options: [
+            "Permanent dipole-dipole attractions.",
+            "Temporary induced dipole-induced dipole attractions.",
+            "Specific to highly polar molecules.",
+            "Stronger than hydrogen bonds."
+        ],
+        correctAnswer: 1,
+        reasoning: "London forces are a type of Van der Waals' force, typically associated with non-polar molecules like noble gases, caused by temporary induced dipoles (inferred from 'London forces... present in noble gases')."
+    },
+    {
+        question: "Crystalline solids possess rigid and definite geometrical shapes due to:",
+        options: [
+            "Random molecular arrangement.",
+            "Short-range order only.",
+            "Regular, repeating three-dimensional order of particles.",
+            "Their amorphous nature."
+        ],
+        correctAnswer: 2,
+        reasoning: "Crystalline solids are defined as having 'constituent particles... arranged in a regular, repeating three-dimensional order' which gives them 'rigid and definite geometrical shapes'."
+    },
+    {
+        question: "A solid object with a definite geometrical shape and regular, repetitive 3D arrangement of particles is a:",
+        options: [
+            "Liquid.",
+            "Amorphous solid.",
+            "Crystal.",
+            "Gas."
+        ],
+        correctAnswer: 2,
+        reasoning: "Crystal Definition (Tidbit): 'A solid object with a definite geometrical shape where particles have a regular and repetitive three-dimensional arrangement'."
+    },
+    {
+        question: "The consistency or repetition of faces, edges, and interfacial angles within a crystal is called:",
+        options: [
+            "Anisotropy.",
+            "Polymorphism.",
+            "Symmetry.",
+            "Habit."
+        ],
+        correctAnswer: 2,
+        reasoning: "Symmetry: 'The consistency or repetition of faces, edges, and interfacial angles within a crystal'."
+    },
+    {
+        question: "What is the effect of impurities on the internal structure of a crystal?",
+        options: [
+            "They increase crystal purity.",
+            "They enhance crystal growth rate.",
+            "They can cause crystal defects by fitting into lattice holes.",
+            "They improve electrical conductivity uniformly."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Effect of Impurity' states, 'Impurities can cause crystal defects by fitting into lattice holes, altering the crystal structure'."
+    },
+    {
+        question: "The smallest box-like unit that can be stacked to build an entire crystal lattice is the:",
+        options: [
+            "Crystal face.",
+            "Unit cell.",
+            "Lattice point.",
+            "Crystal habit."
+        ],
+        correctAnswer: 1,
+        reasoning: "A 'Unit Cell' is defined as 'The smallest box-like unit... from which the entire crystal lattice can be constructed by stacking in three dimensions'."
+    },
+    {
+        question: "What are the common ionic solids and metals that exhibit cubic unit cells?",
+        options: [
+            "All ionic solids and metals.",
+            "Only those with very large ions.",
+            "Many ionic solids and metals.",
+            "Only non-polar substances."
+        ],
+        correctAnswer: 2,
+        reasoning: "Cubic Unit Cells are 'found in many ionic solids and metals'."
+    },
+    {
+        question: "What is the composition of the NaCl crystal?",
+        options: [
+            "Only Na+ ions.",
+            "Only Cl- ions.",
+            "Equal numbers of Na+ and Cl- ions.",
+            "Unequal numbers of Na+ and Cl- ions."
+        ],
+        correctAnswer: 2,
+        reasoning: "The 'Sodium Chloride (NaCl) Crystal' section states it 'Consists of equal numbers of Na+ and Cl- ions (1:1 ratio)'."
+    },
+    {
+        question: "What is true about lattice energy?",
+        options: [
+            "It is an endothermic process.",
+            "It is released during crystal decomposition.",
+            "It is the energy released when an ionic crystal forms from gaseous ions.",
+            "It can be directly measured experimentally."
+        ],
+        correctAnswer: 2,
+        reasoning: "Lattice Energy is 'the amount of energy released when one mole of an ionic crystal is formed from its constituent gaseous ions... It is a highly exothermic process'."
+    },
+    {
+        question: "Ionic solids do not conduct heat or electricity as solids because:",
+        options: [
+            "Their ions are mobile.",
+            "They have delocalized electrons.",
+            "Their ions are fixed in the lattice.",
+            "They form covalent bonds."
+        ],
+        correctAnswer: 2,
+        reasoning: "Ionic solids 'Do not conduct heat/electricity as solids (ions are fixed)'."
+    },
+    {
+        question: "Molecular solids are generally soluble in solvents of similar polarity (e.g., polar in polar) because of:",
+        options: [
+            "Their high melting points.",
+            "The nature of their intermolecular forces.",
+            "Their strong covalent bonds.",
+            "Their metallic character."
+        ],
+        correctAnswer: 1,
+        reasoning: "Molecular solids' solubility is described as 'Polar molecular solids are soluble in polar solvents; non-polar molecular solids are soluble in non-polar solvents', directly linked to their intermolecular forces."
+    },
+    {
+        question: "Isomorphism describes substances with:",
+        options: [
+            "Same chemical properties, different shapes.",
+            "Different chemical properties, same shapes.",
+            "Same chemical formula, different shapes.",
+            "Same physical properties, different shapes."
+        ],
+        correctAnswer: 1,
+        reasoning: "Isomorphism: 'two or more different crystalline substances have the same crystalline shapes... their physical and chemical properties are different as they are different compounds'."
+    },
+    {
+        question: "Polymorphism refers to:",
+        options: [
+            "Elements existing in different physical forms.",
+            "A compound existing in different chemical forms.",
+            "A substance existing in more than one crystalline form.",
+            "Substances with different chemical properties but similar physical properties."
+        ],
+        correctAnswer: 2,
+        reasoning: "Polymorphism: 'The occurrence of the same crystalline substance in more than one crystalline form under different conditions'."
+    },
+    {
+        question: "The specific temperature at which one crystalline form transforms into another is called the:",
+        options: [
+            "Melting point.",
+            "Boiling point.",
+            "Transition temperature.",
+            "Critical point."
+        ],
+        correctAnswer: 2,
+        reasoning: "Transition Temperature: 'The specific temperature at which one crystalline form of a substance changes into another crystalline form'."
+    },
+    {
+        question: "Which of the following is an example of an allotrope of oxygen?",
+        options: [
+            "Water.",
+            "Hydrogen peroxide.",
+            "Ozone.",
+            "Carbon dioxide."
+        ],
+        correctAnswer: 2,
+        reasoning: "Examples of Allotropy: 'Oxygen: Molecular oxygen (O2), Ozone (O3)'."
+    }
+];
+
+// Update CSS variables with custom colors
+document.documentElement.style.setProperty('--primary-blue', '#1a56db');
+document.documentElement.style.setProperty('--secondary-blue', '#0ea5e9');
+document.documentElement.style.setProperty('--accent-green', '#10b981');
+document.documentElement.style.setProperty('--accent-orange', '#f59e0b');
+document.documentElement.style.setProperty('--accent-red', '#ef4444');
+document.documentElement.style.setProperty('--accent-purple', '#8b5cf6');
+document.documentElement.style.setProperty('--accent-pink', '#ec4899');
+document.documentElement.style.setProperty('--accent-teal', '#14b8a6');
+
+// Global state variables
+const QUIZ_ACCESS_CODE = "1234567890";
+const DEV_ACCESS_CODE = "Dev-PDA-001";
+const ACADEMY_NAME = "PreMium Nexus Testing Service";
+const PAYMENT_NUMBER = "5272";
+const PAYMENT_ACCOUNT_HOLDER = "Account Holder Name";
+const QUIZ_SUBJECT = "Chemistry ";
+const WEBSITE_LINK = "https://premiumdoctoracademy.com";
+const WHATSAPP_CONTACT = "Dev-PDA-001";
+const WHATSAPP_COMMUNITY = "https://chat.whatsapp.com/Gb12P2oI380LeWyJHylOMh?mode=wwt";
+const TIME_PER_MCQ = 60;
+const MARK_PER_MCQ = 1;
+const NEGATIVE_MARKING = 0;
+
+let currentQuizId = 'Med-Rea-001';
+let quizData = quizData_Med_Rea_001;
+let currentQuestion = 0;
+let userAnswers = Array(quizData.length).fill(null);
+let outOfSyllabusQuestions = Array(quizData.length).fill(false);
+let timeLeft;
+let questionTimeLeft;
+let totalTimeInterval;
+let questionTimeInterval;
+let studentData = {};
+
+// DOM elements
+const signinPage = document.getElementById('signin-page');
+const registrationPage = document.getElementById('registration-page');
+const paymentPage = document.getElementById('payment-page');
+const quizAccessPage = document.getElementById('quiz-access-page');
+const quizPage = document.getElementById('quiz-page');
+const resultsPage = document.getElementById('results-page');
+const allMcqsPage = document.getElementById('all-mcqs-page');
+const questionNavEl = document.getElementById('question-nav');
+const questionTextEl = document.getElementById('question-text');
+const optionsContainerEl = document.getElementById('options-container');
+const reasoningEl = document.getElementById('reasoning');
+const reasoningTextEl = document.getElementById('reasoning-text');
+const quizTitleEl = document.getElementById('quiz-title');
+const quizSubjectEl = document.getElementById('quiz-subject');
+const perMcqTimeEl = document.getElementById('per-mcq-time');
+const totalTimerEl = document.getElementById('timer');
+const questionTimerEl = document.getElementById('question-timer');
+const quizProgressEl = document.getElementById('quiz-progress');
+const studentInfoTable = document.getElementById('student-info-table');
+const quizResultsTable = document.getElementById('quiz-results-table');
+const allMcqsList = document.getElementById('all-mcqs-list');
+const devPasswordInput = document.getElementById('developerPassword');
+const devErrorBox = document.getElementById('dev-error-box');
+const quizAccessCodeInput = document.getElementById('quizAccessCode');
+const quizAccessErrorBox = document.getElementById('quiz-error-box');
+const quizAccessFinalInput = document.getElementById('quizAccessFinal');
+const finalQuizErrorBox = document.getElementById('final-quiz-error-box');
+const toggleDevPasswordIcon = document.getElementById('toggleDeveloperPassword');
+const toggleQuizCodeIcon = document.getElementById('toggleQuizAccessCode');
+const toggleFinalQuizIcon = document.getElementById('toggleQuizAccessFinal');
+const websiteLinkEl = document.getElementById('website-link');
+const whatsappContactLinkEl = document.getElementById('whatsapp-contact-link');
+const whatsappCommunityLinkEl = document.getElementById('whatsapp-community-link');
+const reasoningBtn = document.getElementById('reasoning-btn');
+
+// Update academy name in the DOM
+document.querySelectorAll('.logo h1, .promo-banner h2').forEach(el => {
+    el.textContent = el.textContent.replace('PreMium Nexus Testing Service', ACADEMY_NAME);
+});
+
+// Update payment details
+const paymentWhatsappLink = document.getElementById('payment-whatsapp-link');
+if (paymentWhatsappLink) {
+    paymentWhatsappLink.href = 'https://wa.me/' + PAYMENT_NUMBER;
+    paymentWhatsappLink.textContent = PAYMENT_NUMBER;
+}
+const paymentAccountHolderEl = document.getElementById('payment-account-holder');
+if (paymentAccountHolderEl) {
+    paymentAccountHolderEl.textContent = PAYMENT_ACCOUNT_HOLDER;
+}
+
+// Event listeners for password visibility
+if (toggleDevPasswordIcon) toggleDevPasswordIcon.addEventListener('click', () => togglePasswordVisibility('developerPassword', 'toggleDeveloperPassword'));
+if (toggleQuizCodeIcon) toggleQuizCodeIcon.addEventListener('click', () => togglePasswordVisibility('quizAccessCode', 'toggleQuizAccessCode'));
+if (toggleFinalQuizIcon) toggleFinalQuizIcon.addEventListener('click', () => togglePasswordVisibility('quizAccessFinal', 'toggleQuizAccessFinal'));
+
+// Functions
+function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+
+function togglePasswordVisibility(inputID, iconID) {
+    const passwordInput = document.getElementById(inputID);
+    const toggleIcon = document.getElementById(iconID);
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    }
+}
+
+function showQuizAccessForm() {
+    document.getElementById('quiz-access-form').style.display = 'flex';
+    document.getElementById('developer-access-form').style.display = 'none';
+}
+
+function showDeveloperAccessForm() {
+    document.getElementById('developer-access-form').style.display = 'flex';
+    document.getElementById('quiz-access-form').style.display = 'none';
+}
+
+function showRegistrationPage() {
+    showPage('registration-page');
+}
+
+function checkDeveloperPassword() {
+    if (devPasswordInput.value === DEV_ACCESS_CODE) {
+        devErrorBox.style.display = 'none';
+        startQuiz('Med-Rea-001', 'Developer');
+    } else {
+        devErrorBox.style.display = 'block';
+    }
+}
+
+function checkQuizAccessCode() {
+    if (quizAccessCodeInput.value === QUIZ_ACCESS_CODE) {
+        quizAccessErrorBox.style.display = 'none';
+        showPage('quiz-access-page');
+    } else {
+        quizAccessErrorBox.style.display = 'block';
+    }
+}
+
+function accessQuiz() {
+    if (quizAccessFinalInput.value === QUIZ_ACCESS_CODE) {
+        finalQuizErrorBox.style.display = 'none';
+        startQuiz('Med-Rea-001', 'Student');
+    } else {
+        finalQuizErrorBox.style.display = 'block';
+    }
+}
+
+function validateRegistrationForm() {
+    const fields = ['studentName', 'fatherName', 'email', 'mobile'];
+    for (const field of fields) {
+        if (document.getElementById(field).value.trim() === '') {
+            alert('Please fill in all the registration details.');
+            return;
+        }
+    }
+    
+    studentData = {
+        'Student Name': document.getElementById('studentName').value,
+        'Father Name': document.getElementById('fatherName').value,
+        'Email Address': document.getElementById('email').value,
+        'Mobile Number': document.getElementById('mobile').value
+    };
+
+    // Save to local storage
+    localStorage.setItem('studentData', JSON.stringify(studentData));
+    
+    showPage('payment-page');
+}
+
+function submitPayment() {
+    // Collect the data from the form fields
+    const transactionId = document.getElementById('transactionId').value;
+    const accountHolderName = document.getElementById('accountHolderName').value;
+    const amountSent = document.getElementById('amountSent').value;
+
+    // Check if the acknowledgment box is checked
+    if (!document.getElementById('acknowledgment').checked) {
+        alert('Please check the acknowledgment box to proceed.');
+        return;
+    }
+
+    // Check for empty fields.
+    if (!transactionId || !accountHolderName || !amountSent) {
+        alert('Please ensure all required fields are filled out.');
+        return;
+    }
+    
+    // Load student data from local storage
+    const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+    
+    // Combine all data into a single object
+    const formData = {
+        studentName: studentData['Student Name'],
+        fatherName: studentData['Father Name'],
+        email: studentData['Email Address'],
+        mobile: studentData['Mobile Number'],
+        transactionId: transactionId,
+        accountHolderName: accountHolderName,
+        amountSent: amountSent
+    };
+
+    // Replace this URL with the one you copied from Apps Script
+    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyt_Ui7bwAl-tGKvonneZbOkYYo6zRlxOhRvCVISSbnX8DGKgpqmrjQ-soQdPBzXM8/exec';
+    
+    // Send the data using the fetch API
+    fetch(appsScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        cache: 'no-cache',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(formData)
+    })
+    .then(response => {
+        // Since we are using 'no-cors', the response is not readable.
+        // We just assume success if the fetch operation completes.
+        console.log('Data sent successfully!');
+        alert("Payment details submitted successfully! You will receive your Quiz Access Code shortly.");
+        showPage('quiz-access-page');
+    })
+    .catch(error => {
+        console.error('Error submitting data:', error);
+        alert("There was an error submitting your details. Please try again or contact support.");
+    });
+}
+
+function startQuiz(quizId, userType) {
+    currentQuizId = quizId;
+    quizData = quizData_Med_Rea_001;
+    currentQuestion = 0;
+    userAnswers = Array(quizData.length).fill(null);
+    outOfSyllabusQuestions = Array(quizData.length).fill(false);
+    
+    // Set total time based on time per question
+    timeLeft = quizData.length * TIME_PER_MCQ;
+    questionTimeLeft = TIME_PER_MCQ;
+
+    showPage('quiz-page');
+    initQuiz();
+}
+
+function initQuiz() {
+    // Set quiz subject and time per MCQ
+    quizSubjectEl.textContent = QUIZ_SUBJECT;
+    perMcqTimeEl.textContent = Math.floor(TIME_PER_MCQ / 60);
+    
+    // Set contact links
+    websiteLinkEl.href = WEBSITE_LINK;
+    whatsappContactLinkEl.href = 'https://wa.me/' + WHATSAPP_CONTACT;
+    whatsappCommunityLinkEl.href = WHATSAPP_COMMUNITY;
+    
+    quizTitleEl.textContent = `Test - ID: ${currentQuizId}`;
+    renderQuestionNav();
+    renderQuestion();
+
+    if (totalTimeInterval) clearInterval(totalTimeInterval);
+    if (questionTimeInterval) clearInterval(questionTimeInterval);
+    
+    totalTimeInterval = setInterval(updateTotalTimer, 1000);
+    questionTimeInterval = setInterval(updateQuestionTimer, 1000);
+}
+
+function updateTotalTimer() {
+    if (timeLeft > 0) {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        totalTimerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+        clearInterval(totalTimeInterval);
+        submitTest();
+    }
+}
+
+function updateQuestionTimer() {
+    if (questionTimeLeft > 0) {
+        questionTimeLeft--;
+        questionTimerEl.textContent = `${questionTimeLeft}`;
+    } else {
+        questionTimeLeft = TIME_PER_MCQ;
+        navigateQuestion('next');
+    }
+}
+
+function renderQuestionNav() {
+    questionNavEl.innerHTML = '';
+    quizData.forEach((_, index) => {
+        const navItem = document.createElement('div');
+        navItem.classList.add('question-nav-item');
+        navItem.textContent = index + 1;
+        navItem.onclick = () => navigateQuestion(index);
+        
+        if (index === currentQuestion) {
+            navItem.classList.add('current');
+        } else if (userAnswers[index] !== null) {
+            navItem.classList.add('solved');
+        } else if (outOfSyllabusQuestions[index]) {
+            navItem.classList.add('out-of-syllabus');
+        } else {
+            navItem.classList.add('visited');
+        }
+        
+        questionNavEl.appendChild(navItem);
+    });
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const solvedCount = userAnswers.filter(answer => answer !== null).length;
+    const progress = (solvedCount / quizData.length) * 100;
+    quizProgressEl.style.width = `${progress}%`;
+}
+
+function renderQuestion() {
+    reasoningEl.style.display = 'none';
+    reasoningBtn.classList.add('disabled');
+    const question = quizData[currentQuestion];
+    questionTextEl.textContent = `${currentQuestion + 1}. ${question.question}`;
+    
+    optionsContainerEl.innerHTML = '';
+    question.options.forEach((option, index) => {
+        const optionEl = document.createElement('div');
+        optionEl.classList.add('option');
+        optionEl.textContent = option;
+        
+        // Add click listener only if not already answered
+        if (userAnswers[currentQuestion] === null) {
+        optionEl.onclick = () => selectOption(index);
+        } else {
+        // Show visual feedback for already answered questions
+        if (index === userAnswers[currentQuestion]) {
+            optionEl.classList.add(userAnswers[currentQuestion] === question.correctAnswer ? 'correct' : 'incorrect');
+        }
+        }
+        
+        optionsContainerEl.appendChild(optionEl);
+    });
+    
+    questionTimeLeft = TIME_PER_MCQ;
+    questionTimerEl.textContent = `${questionTimeLeft}`;
+    renderQuestionNav();
+}
+
+function selectOption(optionIndex) {
+    const question = quizData[currentQuestion];
+    userAnswers[currentQuestion] = optionIndex;
+    
+    // Enable reasoning button
+    reasoningBtn.classList.remove('disabled');
+    
+    // Apply visual feedback
+    const options = optionsContainerEl.querySelectorAll('.option');
+    options.forEach((option, index) => {
+        option.onclick = null; // Disable further clicks
+        if (index === question.correctAnswer) {
+            option.classList.add('correct');
+        } else if (index === optionIndex) {
+            option.classList.add('incorrect');
+        }
+    });
+
+    renderQuestionNav();
+}
+
+function navigateQuestion(direction) {
+    if (direction === 'next') {
+        currentQuestion = (currentQuestion + 1) % quizData.length;
+    } else if (direction === 'prev') {
+        currentQuestion = (currentQuestion - 1 + quizData.length) % quizData.length;
+    } else if (direction === 'skip') {
+        // Do nothing, just move to the next question
+        currentQuestion = (currentQuestion + 1) % quizData.length;
+    } else {
+        currentQuestion = direction;
+    }
+    renderQuestion();
+}
+
+function toggleReasoning() {
+    if (reasoningBtn.classList.contains('disabled')) return;
+    
+    const question = quizData[currentQuestion];
+    if (reasoningEl.style.display === 'block') {
+        reasoningEl.style.display = 'none';
+    } else {
+        reasoningTextEl.textContent = question.reasoning;
+        reasoningEl.style.display = 'block';
+    }
+}
+
+function markOutOfSyllabus() {
+    outOfSyllabusQuestions[currentQuestion] = true;
+    userAnswers[currentQuestion] = null;
+    renderQuestionNav();
+    navigateQuestion('next');
+}
+
+function submitTest() {
+    if (confirm('Are you sure you want to submit the quiz?')) {
+        clearInterval(totalTimeInterval);
+        clearInterval(questionTimeInterval);
+
+        let correct = 0;
+        let incorrect = 0;
+        let unanswered = 0;
+        let outOfSyllabus = 0;
+
+        quizData.forEach((question, index) => {
+            if (outOfSyllabusQuestions[index]) {
+                outOfSyllabus++;
+            } else if (userAnswers[index] === null) {
+                unanswered++;
+            } else if (userAnswers[index] === question.correctAnswer) {
+                correct++;
+            } else {
+                incorrect++;
+            }
+        });
+
+        const totalQuestions = quizData.length;
+        const totalScore = (correct * MARK_PER_MCQ) - (incorrect * NEGATIVE_MARKING);
+        const totalMarks = totalQuestions * MARK_PER_MCQ;
+
+        // Load student data from local storage
+        const savedStudentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+        
+        // Populate student info table
+        let studentInfoHtml = '';
+        for (const [key, value] of Object.entries(savedStudentData)) {
+            studentInfoHtml += `<tr><td>${key}</td><td>${value}</td></tr>`;
+        }
+        studentInfoTable.innerHTML = studentInfoHtml;
+
+        // Populate quiz results table
+        quizResultsTable.innerHTML = `
+            <tr><td>Total Questions</td><td>${totalQuestions}</td></tr>
+            <tr><td>Correct Answers</td><td>${correct}</td></tr>
+            <tr><td>Incorrect Answers</td><td>${incorrect}</td></tr>
+            <tr><td>Unanswered</td><td>${unanswered}</td></tr>
+            <tr><td>Out of Syllabus</td><td>${outOfSyllabus}</td></tr>
+            <tr><td>Mark Per MCQ</td><td>${MARK_PER_MCQ}</td></tr>
+            <tr><td>Negative Marking</td><td>${NEGATIVE_MARKING}</td></tr>
+            <tr><td>Your Score</td><td>${totalScore} / ${totalMarks}</td></tr>
+        `;
+
+        showPage('results-page');
+    }
+}
+
+function restartTest() {
+    if (confirm('Are you sure you want to retake the full test? Your current progress will be lost.')) {
+        // Reset quiz data and state
+        quizData = quizData_Med_Rea_001;
+        currentQuestion = 0;
+        userAnswers = Array(quizData.length).fill(null);
+        outOfSyllabusQuestions = Array(quizData.length).fill(false);
+        timeLeft = quizData.length * TIME_PER_MCQ;
+        
+        showPage('quiz-page');
+        initQuiz();
+    }
+}
+
+function retakeIncorrect() {
+    const incorrectQuestions = quizData.filter((question, index) => 
+        !outOfSyllabusQuestions[index] && 
+        userAnswers[index] !== null && 
+        userAnswers[index] !== question.correctAnswer);
+    
+    if (incorrectQuestions.length === 0) {
+        alert('You have no incorrect questions to retake!');
+        return;
+    }
+    
+    quizData = incorrectQuestions;
+    currentQuestion = 0;
+    userAnswers = Array(quizData.length).fill(null);
+    outOfSyllabusQuestions = Array(quizData.length).fill(false);
+    timeLeft = quizData.length * TIME_PER_MCQ;
+    
+    showPage('quiz-page');
+    initQuiz();
+}
+
+function viewAllMcqs() {
+    allMcqsList.innerHTML = '';
+    quizData_Med_Rea_001.forEach((question, index) => {
+        const mcqItem = document.createElement('div');
+        mcqItem.classList.add('all-mcq-item');
+        mcqItem.innerHTML = `
+            <div class="question-text">${index + 1}. ${question.question}</div>
+            <div class="all-mcq-options">
+                ${question.options.map((option, optIndex) => `
+                    <div class="all-mcq-option ${optIndex === question.correctAnswer ? 'correct' : ''}">
+                        ${option}
+                    </div>
+                `).join('')}
+            </div>
+            <div class="all-mcq-reasoning">
+                <strong>Reasoning:</strong> ${question.reasoning}
+            </div>
+        `;
+        allMcqsList.appendChild(mcqItem);
+    });
+    showPage('all-mcqs-page');
+}
+
+// Initial state
+showPage('signin-page');
+
+</script>
+</body>
+</html>
+                            
